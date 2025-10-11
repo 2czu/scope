@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 18:21:22 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/09/12 19:45:53 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/11 11:01:08 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,6 @@
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
-#include "../minilibx-linux/mlx.h"
+#include "glad/glad.h"
+#include "KHR/khrplatform.h"
+#include "Vector3f.hpp"

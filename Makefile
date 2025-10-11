@@ -6,7 +6,7 @@
 #    By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/23 16:41:00 by pacda-si          #+#    #+#              #
-#    Updated: 2025/09/12 19:46:16 by pacda-si         ###   ########.fr        #
+#    Updated: 2025/10/11 10:26:45 by pacda-si         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,41 +38,31 @@ BG_MAGENTA      = \033[48;5;201m
 NAME        = scop
 SRCS_DIR    = ./srcs
 SRCS        = $(SRCS_DIR)/main.cpp \
+			  $(SRCS_DIR)/glad.c
 
 OBJS_DIR    = objs
 OBJS        = $(SRCS:$(SRCS_DIR)/%.cpp=$(OBJS_DIR)/%.o)
 
 HEADERS =	includes/
 
-MLX         = minilibx-linux/
-MLX_A       = $(MLX_PATH)libmlx.a
-MLX_PATH    = ./minilibx-linux/
-MLX_FLAGS   = -Lminilibx-linux -lmlx -lXext -lX11 -lm -lz
+OGL_FLAGS  = -lGL -lGLU -lglut -lSDL2
 
 
 # ────────────────────────────── Compiler ────────────────────────────
 CXX         = g++
-CFLAGS      = -std=c++98 -Wall -Wextra -g3
+CXXFLAGS      = -Werror -Wall -Wextra -g3
 
 # ────────────────────────────── Rules ───────────────────────────────
 all: $(NAME)
 
-$(MLX_PATH) : 
-	@if [ ! -d $(MLX_PATH) ]; then git clone https://github.com/42Paris/minilibx-linux.git; fi;
-
-$(NAME): $(MLX_PATH) $(MLX_A) $(OBJS) $(HEADERS)
+$(NAME): $(OBJS) $(HEADERS)
 	@echo "$(BLOOD_RED)$(BOLD)Making $(NAME)...$(RESET)"
-	@$(CXX) $(OBJS) -o $(NAME)
+	@$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME) $(OGL_FLAGS)
 	@echo "$(NEON_GREEN)$(BOLD)Made $(NAME) without any problem. ✔\n$(RESET)"
-
-$(MLX_A) :
-	@echo $(LIGHT_CYAN)$(BOLD)"\nCompiling MiniLibX..."
-	@make -sC minilibx-linux -j
-	@echo $(NEON_GREEN)$(BOLD)"Library Compiled. ✔\n"
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.cpp
 	@mkdir -p $(dir $@)
-	@$(CXX) $(CFLAGS) -c $< -o $@
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
 	@if [ -d "$(OBJS_DIR)" ]; then \
