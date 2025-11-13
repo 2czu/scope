@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 18:20:44 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/10/25 14:09:13 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/13 12:00:33 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 #include <fcntl.h>
 
 GLuint VBO;
+GLuint VBO2;
+GLuint VAO;
+GLuint VAO2;
 GLint gScaleLocation = 0;
 
 const char *pVSFileName = "./shaders/shader.vs";
@@ -31,14 +34,23 @@ static void createVertexBuffer()
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CW);
 
-    Vector3f vertices[3];
-    vertices[0] = Vector3f(-1.0f, -1.0f, 0.0f);
-    vertices[1] = Vector3f(0.0f, 1.0f, 0.0f);
-    vertices[2] = Vector3f(1.0f, -1.0f, 0.0f);
+    Vector3f triangle1[3];
+    triangle1[0] = Vector3f(-0.5f, -0.5f, 0.0f);
+    triangle1[1] = Vector3f(-0.5f, 0.5f, 0.0f);
+    triangle1[2] = Vector3f(0.5f, -0.5f, 0.0f);
+    
+    Vector3f triangle2[3];
+    triangle2[0] = Vector3f(-0.45f, 0.55f, 0.0f);
+    triangle2[1] = Vector3f(0.55f, 0.55f, 0.0f);
+    triangle2[2] = Vector3f(0.55f, -0.45f, 0.0f);
     
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle1), triangle1, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &VBO2);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle2), triangle2, GL_STATIC_DRAW);
 }
 
 static bool readFile(const char* pFileName, std::string &outfile)
@@ -173,8 +185,12 @@ static void render()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glDrawArrays(GL_TRIANGLES, 0, 3);
-    
     glDisableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 
