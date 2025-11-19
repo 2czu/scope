@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 18:20:44 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/17 17:50:55 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/19 13:14:27 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,23 @@
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
+#include <fstream>
+#include <vector>
+#include <stdexcept>
+#include <string>
 
 GLuint VBO;
 GLuint VAO;
 GLuint EBO;
 unsigned int texture;
+unsigned int viewLoc = 0;
+unsigned int modelLoc = 0;
+unsigned int projectionLoc = 0;
+
+int windowWidth = 1920;
+int windowHeight = 1080;
 // GLint redColorLocation = 0;
 
-#include <fstream>
-#include <vector>
-#include <stdexcept>
-#include <string>
 
 struct Image {
     int width;
@@ -78,26 +84,46 @@ Image loadPPM(const std::string& path) {
 
 static void createVertexBuffer()
 {
-    // glEnable(GL_CULL_FACE);
-    // glFrontFace(GL_CW);
+    glEnable(GL_CULL_FACE);
+    // glEnable(GL_DEPTH_TEST);
+    glFrontFace(GL_CW);
 
-    float vertices[] = {
-    // positions         // colors
-    -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, // bottom left
-    -0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f,   // top left
-    0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f,// bottom right
-    0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f,   // top right
-    };
+float vertices[] = {
+    // positions         // colors (optional)
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f, 0.0f, 0.0f,// 0: left-bottom-back
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f, 0.0f, 0.0f,// 1: right-bottom-back
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 0.0f, 0.0f,// 2: right-top-back
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 0.0f,// 3: left-top-back
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// 4: left-bottom-front
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f,// 5: right-bottom-front
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, 0.0f, 0.0f,// 6: right-top-front
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f,  0.0f, 0.0f// 7: left-top-front
+};
     // float texCoords[] = {
     //     0.0f, 0.0f,  // lower-left corner  
     //     1.0f, 0.0f,  // lower-right corner
     //     0.5f, 1.0f   // top-center corner
     // };
-    unsigned int indices[] =
-    {
-        0, 1, 2,
-        1, 3, 2
-    };
+    unsigned int indices[] = {
+    // Back face
+    0, 1, 2,
+    2, 3, 0,
+    // Front face
+    4, 6, 5,
+    6, 4, 7,
+    // Left face
+    4, 0, 3,
+    3, 7, 4,
+    // Right face
+    1, 5, 6,
+    6, 2, 1,
+    // Bottom face
+    4, 5, 1,
+    1, 0, 4,
+    // Top face
+    3, 2, 6,
+    6, 7, 3
+};
 
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -136,27 +162,45 @@ static void compileShaders(void)
     Shader fragment = Shader("./shaders/shader.fs", GL_FRAGMENT_SHADER);
 
     ShaderProgram shaderProgram;
-
+    
     shaderProgram.attachShader(vertex);
     shaderProgram.attachShader(fragment);
     shaderProgram.link();
     shaderProgram.use();
+    
+    viewLoc = glGetUniformLocation(shaderProgram.getID(), "view");
+    modelLoc = glGetUniformLocation(shaderProgram.getID(), "model");
+    projectionLoc = glGetUniformLocation(shaderProgram.getID(), "projection");
 }
 
 static void render()
 {
-    static GLclampf red = 0.0f;
+    static float translate = 0.0f;
 
-    red += 1.0f/256.0f;
+    translate += 0.01f;
 
+    Matrix4f view;
+    view = view.translation(Vector3f(0.0f, 0.0f, -3.0f));
 
-    // glUniform1f(redColorLocation, sin(red));
+    Matrix4f model;
+    model = model.rotationAxis(Vector3f(0.5f, 1.0f, 0.0f), (float)(SDL_GetTicks() / 1000.0f) * (M_PI / 3));
     
-    glClear(GL_COLOR_BUFFER_BIT);
+    Matrix4f projection;
+    projection = projection.perspective(M_PI / 4, (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
+    
+
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, view.m.data());
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.m.data());
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.m.data());
+
+    
+    
+    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // glBindTexture(GL_TEXTURE_2D, texture);
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
 }
 
@@ -172,9 +216,6 @@ int main(int argc, char** argv)
         std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
         return 1;
     }
-
-    int windowWidth = 1920;
-    int windowHeight = 1080;
 
     SDL_Window* window = SDL_CreateWindow(
         "Salut", 
