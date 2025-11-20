@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 18:20:44 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/19 13:14:27 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:35:41 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,14 +193,12 @@ static void render()
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.m.data());
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.m.data());
 
-    
-    
-    
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CW);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // glBindTexture(GL_TEXTURE_2D, texture);
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 
 }
 
@@ -246,12 +244,6 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    // vec3 test
-
-    // Vector3f vertices[1];
-    // vertices[0] = Vector3f();
-    // vertices[0].print();
-
     try{
         createVertexBuffer();
         
@@ -279,8 +271,10 @@ int main(int argc, char** argv)
         SDL_GL_SwapWindow(window);
     }
 
-    SDL_GL_DeleteContext(glContext);
-    SDL_DestroyWindow(window);
+    if (window)
+        SDL_DestroyWindow(window);
+    if (glContext)
+        SDL_GL_DeleteContext(glContext);
     SDL_Quit();
 
     return 0;

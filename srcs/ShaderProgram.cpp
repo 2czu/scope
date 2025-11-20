@@ -6,12 +6,11 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:43:46 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/14 12:54:06 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/20 19:02:46 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ShaderProgram.hpp"
-
 
 ShaderProgram::ShaderProgram() : programID(0)
 {
