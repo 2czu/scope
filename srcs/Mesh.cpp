@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:45:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 19:01:13 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/21 20:37:44 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 Mesh::Mesh(std::vector<float> &vertices, std::vector<unsigned int> &indices, unsigned int indexCount)
 {
-    this->indexCount = indexCount * 3;
+    this->indexedVertices = indexCount * 3;
 
 	glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -38,10 +38,10 @@ void Mesh::draw(void)
 {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    glFrontFace(GL_CW);
+    glFrontFace(GL_CCW);
 
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, this->indexCount, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, this->indexedVertices, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
 

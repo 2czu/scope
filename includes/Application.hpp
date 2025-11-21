@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:29:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 16:55:45 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/21 20:24:26 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ class Application
 
 		void			initialize();
 		void			run();
+		void			handleKeys(bool *KEYS);
 
 };

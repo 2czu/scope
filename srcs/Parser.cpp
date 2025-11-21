@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:13:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 19:00:43 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/21 20:06:47 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ static bool isFloat(std::string& value)
 	return true;
 }
 
+float randomFloat()
+{
+    return (float)(rand()) / (float)(RAND_MAX);
+}
+
 Mesh Parser::parseObjFile(const std::string &filepath)
 {
 	std::vector<float>		vertices;
@@ -33,6 +38,8 @@ Mesh Parser::parseObjFile(const std::string &filepath)
 	unsigned int			vCount = 0;
 	unsigned int			iCount = 0;
 	
+	srand(time(NULL));
+
 	if (!ifs.is_open())
 		throw std::runtime_error("File not found");
 	while (std::getline(ifs, line))
@@ -52,9 +59,9 @@ Mesh Parser::parseObjFile(const std::string &filepath)
 			vertices.push_back(std::stof(x));
 			vertices.push_back(std::stof(y));
 			vertices.push_back(std::stof(z));
-			vertices.push_back(1.0f);
-			vertices.push_back(1.0f);
-			vertices.push_back(1.0f);
+			vertices.push_back(randomFloat());
+			vertices.push_back(randomFloat());
+			vertices.push_back(randomFloat());
 			vCount++;
 		}
 		else if (prefix == "f")

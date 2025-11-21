@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:52:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 18:19:15 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/21 20:02:09 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class Mesh
 		
 		GLuint VAO, VBO, EBO;
 
-		unsigned int indexCount;
+		unsigned int indexedVertices;
 
 		void draw();
 		void print(std::vector<float> &vertices, std::vector<unsigned int> &indices);
