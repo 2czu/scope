@@ -6,7 +6,7 @@
 #    By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/23 16:41:00 by pacda-si          #+#    #+#              #
-#    Updated: 2025/11/14 12:46:39 by pacda-si         ###   ########.fr        #
+#    Updated: 2025/11/21 16:58:49 by pacda-si         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,16 @@ SRCS_DIR    = ./srcs
 SRCS        = $(SRCS_DIR)/main.cpp \
 			  $(SRCS_DIR)/glad.c \
 			  $(SRCS_DIR)/Shader.cpp \
-			  $(SRCS_DIR)/ShaderProgram.cpp
+			  $(SRCS_DIR)/ShaderProgram.cpp \
+			  $(SRCS_DIR)/Application.cpp \
+			  $(SRCS_DIR)/Camera.cpp \
+			  $(SRCS_DIR)/Material.cpp \
+			  $(SRCS_DIR)/Mesh.cpp \
+			  $(SRCS_DIR)/Object3D.cpp \
+			  $(SRCS_DIR)/Parser.cpp \
+			  $(SRCS_DIR)/Renderer.cpp \
+			  $(SRCS_DIR)/Scene.cpp \
+			  $(SRCS_DIR)/Transform.cpp
 			  
 
 OBJS_DIR    = objs

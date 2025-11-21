@@ -1,29 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   scop.hpp                                           :+:      :+:    :+:   */
+/*   Material.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/12 18:21:22 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 16:49:34 by pacda-si         ###   ########.fr       */
+/*   Created: 2025/11/21 15:58:07 by pacda-si          #+#    #+#             */
+/*   Updated: 2025/11/21 16:04:21 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#include "../includes/Material.hpp"
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <fstream>
-#include <sstream>
-#include <cmath>
-#include <cstdlib>
-#include <cstring>
-#include "glad/glad.h"
-#include "KHR/khrplatform.h"
-#include "Vector3f.hpp"
-#include "Shader.hpp"
-#include "ShaderProgram.hpp"
-#include "Matrix4f.hpp"
-#include "Application.hpp"
+void Material::compileShaders()
+{
+	Shader vertex = Shader("./shaders/shader.vs", GL_VERTEX_SHADER);
+    Shader fragment = Shader("./shaders/shader.fs", GL_FRAGMENT_SHADER);
+    
+    shader.attachShader(vertex);
+    shader.attachShader(fragment);
+    shader.link();
+
+}

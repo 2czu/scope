@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 10:39:52 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/14 12:57:31 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/21 15:42:50 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ static bool readFile(const char* pFileName, std::string &outfile)
     outfile = ss.str();
     f.close();
 
-    // Remove UTF-8 BOM if present
     if (outfile.size() >= 3 &&
         (unsigned char)outfile[0] == 0xEF &&
         (unsigned char)outfile[1] == 0xBB &&

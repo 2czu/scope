@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:43:46 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/20 19:02:46 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/21 16:09:11 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,15 @@ ShaderProgram::ShaderProgram() : programID(0)
 ShaderProgram::~ShaderProgram()
 {
 	
+}
+
+void ShaderProgram::setUniformMat4(const std::string &name, const Matrix4f &mat)
+{
+    GLuint toSetLoc;
+
+    toSetLoc = glGetUniformLocation(this->programID, name.c_str());
+
+    glUniformMatrix4fv(toSetLoc, 1, GL_FALSE, mat.m.data());
 }
 
 void ShaderProgram::attachShader(const Shader& shader)

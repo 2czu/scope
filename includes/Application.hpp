@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:29:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/20 18:39:38 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/21 16:55:45 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 #include <SDL2/SDL.h>
 #include <iostream>
-#include <glad/glad.h>
+#include "glad/glad.h"
 #include <KHR/khrplatform.h>
 #include "Renderer.hpp"
+#include "Scene.hpp"
 
 class Application
 {
@@ -29,9 +30,10 @@ class Application
 		int				windowHeight;
 		SDL_GLContext	glContext;
 
+		Scene			scene;
 		Renderer		renderer;
 
-		int				initialize();
+		void			initialize();
 		void			run();
 
 };

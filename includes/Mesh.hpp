@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:52:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/20 19:01:35 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/21 18:19:15 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,14 @@
 class Mesh
 {	
 	public :
-		Mesh(std::vector<Vector3f> &vertices, std::vector<uint32_t> &indices);
+		Mesh(std::vector<float> &vertices, std::vector<unsigned int> &indices, unsigned int indexCount);
+		Mesh() {};
 		~Mesh() {};
 		
 		GLuint VAO, VBO, EBO;
 
+		unsigned int indexCount;
+
 		void draw();
+		void print(std::vector<float> &vertices, std::vector<unsigned int> &indices);
 };

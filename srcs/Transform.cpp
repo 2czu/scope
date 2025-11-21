@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   scop.hpp                                           :+:      :+:    :+:   */
+/*   Transform.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/12 18:21:22 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 16:49:34 by pacda-si         ###   ########.fr       */
+/*   Created: 2025/11/21 16:46:45 by pacda-si          #+#    #+#             */
+/*   Updated: 2025/11/21 19:01:31 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#include "../includes/Transform.hpp"
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <fstream>
-#include <sstream>
-#include <cmath>
-#include <cstdlib>
-#include <cstring>
-#include "glad/glad.h"
-#include "KHR/khrplatform.h"
-#include "Vector3f.hpp"
-#include "Shader.hpp"
-#include "ShaderProgram.hpp"
-#include "Matrix4f.hpp"
-#include "Application.hpp"
+Matrix4f Transform::getMatrix()
+{
+	Matrix4f m;
+	return m.rotationAxis(Vector3f(0.0f, 1.0f, 0.0f), (float)(SDL_GetTicks() / 1000.0f) * (M_PI / 3));
+}

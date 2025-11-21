@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 15:14:17 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/19 12:07:56 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/21 17:56:21 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ struct Matrix4f {
 
     static Matrix4f translation(const Vector3f& t) {
         Matrix4f r = identity();
-        r.m[12] = t.x; // colonne 4, ligne 1
-        r.m[13] = t.y; // colonne 4, ligne 2
-        r.m[14] = t.z; // colonne 4, ligne 3
+        r.m[12] = t.x;
+        r.m[13] = t.y;
+        r.m[14] = t.z;
         return r;
     }
 
@@ -79,7 +79,6 @@ struct Matrix4f {
         return r;
     }
 
-    // multiplication colonne-major
     Matrix4f operator*(const Matrix4f& o) const {
         Matrix4f r(0.0f);
         for (int row = 0; row < 4; row++) {

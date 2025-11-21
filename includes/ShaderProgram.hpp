@@ -6,27 +6,29 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:40:17 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/14 12:26:27 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/21 16:07:19 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "Shader.hpp"
+#include "Matrix4f.hpp"
 #include <vector>
 
 class ShaderProgram
 {
 	private:
-		unsigned int programID;
-		std::vector<Shader> shaders;
+		unsigned int		programID;
+		std::vector<Shader>	shaders;
 
 	public:
 		ShaderProgram();
 		~ShaderProgram();
 
-		void attachShader(const Shader& shader);
+		void				attachShader(const Shader& shader);
+		void				setUniformMat4(const std::string &name, const Matrix4f &mat);
 
-		void			link(void);
-		void			use();
-		unsigned int	getID() const;
+		void				link(void);
+		void				use();
+		unsigned int		getID() const;
 };

@@ -6,15 +6,16 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:31:40 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/20 19:00:11 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/21 19:02:15 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Application.hpp"
+#include "../includes/Application.hpp"
 
 Application::Application()
 {
-
+    windowWidth = 1280;
+    windowHeight = 720;
 }
 
 Application::~Application()
@@ -26,14 +27,16 @@ Application::~Application()
     SDL_Quit();
 }
 
-int		Application::initialize(void)
+void	Application::initialize(void)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
-        return 1;
+        throw std::runtime_error("");
     }
 
-    SDL_Window* window = SDL_CreateWindow(
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+
+    window = SDL_CreateWindow(
         "Salut", 
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
         windowWidth, windowHeight, 
@@ -41,26 +44,21 @@ int		Application::initialize(void)
     );
 
     if (!window) {
-        std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        return 1;
+        throw std::runtime_error("SDL_CreateWindow Error: ");
     }
 
-    SDL_GLContext glContext = SDL_GL_CreateContext(window);
+    glContext = SDL_GL_CreateContext(window);
     if (!glContext) {
-        std::cerr << "SDL_GL_CreateContext Error: " << SDL_GetError() << std::endl;
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
+        throw std::runtime_error("SDL_GL_CreateContext Error: ");
     }
 
     if (!gladLoadGL()) {
-        std::cerr << "Failed to initialize GLAD" << std::endl;
-        SDL_GL_DeleteContext(glContext);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
+        throw std::runtime_error("Failed to initialize GLAD");
     }
+
+    Camera *camera = new Camera(windowWidth, windowHeight);
+
+    scene.setCamera(camera);
 }
 
 void	Application::run(void)
@@ -70,6 +68,9 @@ void	Application::run(void)
 
 	try
 	{
+        this->initialize();
+
+        scene.addObject(Object3D("./resources/42.obj"));
 		while (running)
 		{
 			while (SDL_PollEvent(&event))
@@ -78,7 +79,7 @@ void	Application::run(void)
 					running = false;
 			}
 
-			renderer.renderScene();
+			renderer.renderScene(scene);
 
 			SDL_GL_SwapWindow(window);
 		}
