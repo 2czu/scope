@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:31:40 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 20:50:22 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/22 18:29:43 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 Application::Application()
 {
-    windowWidth = 1280;
-    windowHeight = 720;
+    windowWidth = 1920;
+    windowHeight = 1080;
 }
 
 Application::~Application()
@@ -57,29 +57,37 @@ void	Application::initialize(void)
     }
 
 	SDL_ShowCursor(SDL_DISABLE);
+	SDL_WarpMouseInWindow(window, windowWidth / 2, windowHeight / 2);
 
     Camera *camera = new Camera(windowWidth, windowHeight);
 
     scene.setCamera(camera);
 }
 
-void    Application::handleKeys(bool *KEYS)
+void    Application::handleKeys(bool *KEYS, bool &running)
 {
-	if (KEYS[SDLK_d])
-		this->scene.camera->position.x -= 0.05f;
-	if (KEYS[SDLK_a])
-		this->scene.camera->position.x += 0.05f;
+	float camSpeed = 0.05f;
+
 	if (KEYS[SDLK_w])
-		this->scene.camera->position.z += 0.05f;
+		this->scene.camera->position += (this->scene.camera->front * camSpeed);
 	if (KEYS[SDLK_s])
-		this->scene.camera->position.z -= 0.05f;
-	SDL_WarpMouseInWindow(window, windowWidth / 2, windowHeight / 2);
+		this->scene.camera->position -= (this->scene.camera->front * camSpeed);
+	if (KEYS[SDLK_a])
+		this->scene.camera->position -= (this->scene.camera->front.cross(this->scene.camera->up)).normalized() * camSpeed;
+	if (KEYS[SDLK_d])
+		this->scene.camera->position += (this->scene.camera->front.cross(this->scene.camera->up)).normalized() * camSpeed;
+    if (KEYS[SDLK_ESCAPE])
+		running = false;
 }
 
 void	Application::run(void)
 {
 	bool running = true;
     SDL_Event event;
+	Uint64 NOW = SDL_GetPerformanceCounter();
+	Uint64 LAST = 0;
+	int x, y;
+	double frame_time = 0;
 
     bool KEYS[322];
     
@@ -91,9 +99,15 @@ void	Application::run(void)
 	{
         this->initialize();
 
-        scene.addObject(Object3D("./resources/42.obj"));
+        scene.addObject(Object3D("./resources/teapot.obj"));
 		while (running)
 		{
+			LAST = NOW;
+			NOW = SDL_GetPerformanceCounter();
+
+			double delta_ms = (double)((NOW - LAST) * 1000 / (double)SDL_GetPerformanceFrequency());
+			frame_time = delta_ms / 1000.0;
+
 			while (SDL_PollEvent(&event))
 			{
 				if (event.type == SDL_QUIT)
@@ -110,13 +124,16 @@ void	Application::run(void)
                 }
 				else if (event.type == SDL_MOUSEMOTION)
 				{
-					int x,y;
 					SDL_GetMouseState(&x, &y);
-					std::cout << x << ", " << y << std::endl;
+					if (x != (windowWidth / 2) || y != (windowHeight / 2))
+						SDL_WarpMouseInWindow(window, windowWidth / 2, windowHeight / 2);
 				}
 			}
 
-            handleKeys(KEYS);
+
+            handleKeys(KEYS, running);
+			scene.camera->rotateCamera(x, y, windowWidth, windowHeight, frame_time);
+
 			renderer.renderScene(scene);
 
 			SDL_GL_SwapWindow(window);

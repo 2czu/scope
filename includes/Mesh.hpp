@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:52:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 20:02:09 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/22 18:22:06 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@
 #include <iostream>
 #include <fstream>
 
-#include "Vector3f.hpp"
+#include "Math.hpp"
 #include "glad/glad.h"
 
 class Mesh
 {	
 	public :
-		Mesh(std::vector<float> &vertices, std::vector<unsigned int> &indices, unsigned int indexCount);
+		Mesh(std::vector<Vector3f> &vertices, std::vector<unsigned int> &indices, unsigned int indexCount);
 		Mesh() {};
 		~Mesh() {};
 		
@@ -31,5 +31,4 @@ class Mesh
 		unsigned int indexedVertices;
 
 		void draw();
-		void print(std::vector<float> &vertices, std::vector<unsigned int> &indices);
 };

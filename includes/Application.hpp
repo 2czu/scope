@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:29:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 20:24:26 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/22 16:42:08 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <KHR/khrplatform.h>
 #include "Renderer.hpp"
 #include "Scene.hpp"
+#include <algorithm>
 
 class Application
 {
@@ -35,6 +36,6 @@ class Application
 
 		void			initialize();
 		void			run();
-		void			handleKeys(bool *KEYS);
+		void			handleKeys(bool *KEYS, bool &running);
 
 };

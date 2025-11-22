@@ -6,14 +6,13 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 12:56:26 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 17:43:12 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/22 17:43:39 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "Matrix4f.hpp"
-#include "Vector3f.hpp"
+#include "Math.hpp"
 
 class Camera
 {
@@ -22,11 +21,22 @@ class Camera
 		~Camera() {};
 
 		Vector3f		position;
+		Vector3f		target;
+		Vector3f		direction;
+		Vector3f		right;
+		Vector3f		up;
+		Vector3f		front;
+
 		float			FOV;
 		float			near_plane;
 		float			far_plane;
 		float			aspect_ratio;
+		float			pitch;
+		float			yaw;
 		
 		Matrix4f getViewMatrix();
 		Matrix4f getProjMatrix();
+
+		void	 rotateCamera(const int &x, const int &y, const int &windowWidth,
+								const int &windowHeight, const float &frame_time);
 };

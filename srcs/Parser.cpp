@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:13:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 20:06:47 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/22 17:12:25 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,33 @@ float randomFloat()
     return (float)(rand()) / (float)(RAND_MAX);
 }
 
+void centerModel(std::vector<Vector3f> &vertices)
+{
+	Vector3f min(+FLT_MAX, +FLT_MAX, +FLT_MAX);
+	Vector3f max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+
+	for (auto& v : vertices)
+	{
+		if (v.x < min.x) min.x = v.x;
+		if (v.y < min.y) min.y = v.y;
+		if (v.z < min.z) min.z = v.z;
+
+		if (v.x > max.x) max.x = v.x;
+		if (v.y > max.y) max.y = v.y;
+		if (v.z > max.z) max.z = v.z;
+	}
+
+	Vector3f center = (min + max) * 0.5f;
+
+	for (auto& v : vertices)
+	{
+		v -= center;
+	}
+}
+
 Mesh Parser::parseObjFile(const std::string &filepath)
 {
-	std::vector<float>		vertices;
+	std::vector<Vector3f>		vertices;
 	std::vector<unsigned int>	indices;
 	std::ifstream			ifs(filepath);
 	std::string				line;
@@ -56,12 +80,9 @@ Mesh Parser::parseObjFile(const std::string &filepath)
 			iss >> std::ws;
 			if (!iss.eof() || isFloat(x) == false || isFloat(y) == false || isFloat(z) == false)
 				throw std::runtime_error("Wrong vertices line format");
-			vertices.push_back(std::stof(x));
-			vertices.push_back(std::stof(y));
-			vertices.push_back(std::stof(z));
-			vertices.push_back(randomFloat());
-			vertices.push_back(randomFloat());
-			vertices.push_back(randomFloat());
+			vertices.push_back(Vector3f(std::stof(x), std::stof(y), std::stof(z)));
+			// float rf = randomFloat();
+			// vertices.push_back(Vector3f(rf, rf, rf));
 			vCount++;
 		}
 		else if (prefix == "f")
@@ -135,6 +156,7 @@ Mesh Parser::parseObjFile(const std::string &filepath)
 
 	// std::cout << "\n" << vertices.size() << std::endl;
 
+	centerModel(vertices);
 	Mesh mesh(vertices, indices, iCount);
 	return mesh;
 }

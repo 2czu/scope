@@ -6,13 +6,14 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:40:17 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 16:07:19 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/22 15:59:20 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
+
 #include "Shader.hpp"
-#include "Matrix4f.hpp"
+#include "Math.hpp"
 #include <vector>
 
 class ShaderProgram

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:02:52 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 15:19:59 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/22 17:10:08 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <fstream>
 #include <sstream>
 #include "Mesh.hpp"
+#include <cfloat>
 
 class Parser
 {
