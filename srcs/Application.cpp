@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:31:40 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/22 18:29:43 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/23 17:42:58 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ void	Application::initialize(void)
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_WarpMouseInWindow(window, windowWidth / 2, windowHeight / 2);
 
-    Camera *camera = new Camera(windowWidth, windowHeight);
+	auto camera = std::make_unique<Camera>(windowWidth, windowHeight);
 
-    scene.setCamera(camera);
+    scene.setCamera(std::move(camera));
 }
 
 void    Application::handleKeys(bool *KEYS, bool &running)
@@ -99,7 +99,7 @@ void	Application::run(void)
 	{
         this->initialize();
 
-        scene.addObject(Object3D("./resources/teapot.obj"));
+        scene.addObject(Object3D("./assets/objs/42.obj"));
 		while (running)
 		{
 			LAST = NOW;

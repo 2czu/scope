@@ -6,13 +6,13 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:45:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/22 18:28:49 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/23 17:45:41 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Mesh.hpp"
 #define STB_IMAGE_IMPLEMENTATION
-#include "../includes/stb/stb_image.h"
+#include "../third_party/stb/stb_image.h"
 
 unsigned int loadCubemap(std::vector<std::string> faces)
 {

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:29:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/22 16:42:08 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/23 17:40:30 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 #include <SDL2/SDL.h>
 #include <iostream>
-#include "glad/glad.h"
-#include <KHR/khrplatform.h>
+#include "../third_party/glad/glad.h"
+#include "../third_party/KHR/khrplatform.h"
 #include "Renderer.hpp"
 #include "Scene.hpp"
 #include <algorithm>
+#include <memory>
 
 class Application
 {

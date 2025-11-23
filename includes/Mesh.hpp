@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:52:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/22 18:22:06 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/23 17:16:36 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <fstream>
 
 #include "Math.hpp"
-#include "glad/glad.h"
+#include "../third_party/glad/glad.h"
 
 class Mesh
 {	

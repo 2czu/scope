@@ -6,7 +6,7 @@
 #    By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/23 16:41:00 by pacda-si          #+#    #+#              #
-#    Updated: 2025/11/21 16:58:49 by pacda-si         ###   ########.fr        #
+#    Updated: 2025/11/23 17:50:04 by pacda-si         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ BG_MAGENTA      = \033[48;5;201m
 # ────────────────────────────── Files ───────────────────────────────
 NAME        = scop
 SRCS_DIR    = ./srcs
+
 SRCS        = $(SRCS_DIR)/main.cpp \
 			  $(SRCS_DIR)/glad.c \
 			  $(SRCS_DIR)/Shader.cpp \

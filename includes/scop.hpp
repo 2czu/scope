@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 18:21:22 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/22 15:59:31 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/23 17:45:22 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
-#include "glad/glad.h"
-#include "KHR/khrplatform.h"
 #include "Shader.hpp"
 #include "ShaderProgram.hpp"
 #include "Math.hpp"

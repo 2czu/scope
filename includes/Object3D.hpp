@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 19:03:55 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 16:48:33 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/23 14:47:37 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@ class Object3D
 	private :
 	
 	public :
-		Mesh mesh;
-		Material material;
+		Mesh		mesh;
+		Material	material;
 		Transform	transform;
+
 		Object3D(const std::string &filepath);
 		~Object3D() {};
 
