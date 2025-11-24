@@ -6,15 +6,21 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:43:46 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 16:09:11 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/24 16:43:50 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ShaderProgram.hpp"
 
-ShaderProgram::ShaderProgram() : programID(0)
+ShaderProgram::ShaderProgram(const std::string &shader) : programID(0)
 {
-	
+    std::string vsrc = "./assets/shaders/" + shader + ".vs";
+    std::string fsrc = "./assets/shaders/" + shader + ".fs";
+
+	vertex = Shader(vsrc, GL_VERTEX_SHADER);
+    fragment = Shader(fsrc, GL_FRAGMENT_SHADER);
+
+    link();
 }
 
 ShaderProgram::~ShaderProgram()
@@ -31,11 +37,6 @@ void ShaderProgram::setUniformMat4(const std::string &name, const Matrix4f &mat)
     glUniformMatrix4fv(toSetLoc, 1, GL_FALSE, mat.m.data());
 }
 
-void ShaderProgram::attachShader(const Shader& shader)
-{
-	shaders.push_back(shader);
-}
-
 
 void ShaderProgram::use()
 {
@@ -50,19 +51,18 @@ unsigned int ShaderProgram::getID() const
 
 void ShaderProgram::link(void)
 {
-	std::vector<unsigned int> shaderIDs;
+	unsigned int vid;
+    unsigned int fid;
 
-	for (Shader& s : shaders)
-	{
-		shaderIDs.push_back(s.compile());
-	}
+    vid = vertex.compile();
+    fid = fragment.compile();
 
 	programID = glCreateProgram();
 	if (!programID)
 		return ;
 
-	for (unsigned int id : shaderIDs)
-		glAttachShader(programID, id);
+	glAttachShader(programID, vid);
+    glAttachShader(programID, fid);
 
 	GLint success;
     GLchar errLog[1204];
@@ -85,6 +85,6 @@ void ShaderProgram::link(void)
         exit(1);
     }
 
-	for (unsigned int id : shaderIDs)
-		glDeleteShader(id);
+    glDeleteShader(vid);
+    glDeleteShader(fid);
 }

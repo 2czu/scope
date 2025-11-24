@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:40:17 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/22 15:59:20 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/24 13:20:36 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ class ShaderProgram
 {
 	private:
 		unsigned int		programID;
-		std::vector<Shader>	shaders;
+		Shader				vertex;
+		Shader				fragment;
 
 	public:
-		ShaderProgram();
+		ShaderProgram(const std::string &shader);
 		~ShaderProgram();
 
-		void				attachShader(const Shader& shader);
 		void				setUniformMat4(const std::string &name, const Matrix4f &mat);
 
 		void				link(void);

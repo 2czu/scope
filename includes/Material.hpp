@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:43:52 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 17:44:46 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/24 16:23:26 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,28 @@
 
 #include "ShaderProgram.hpp"
 
+class Texture
+{
+	public :
+		Texture(const std::string &texturefile);
+		~Texture() {};
+
+		unsigned int	textureID;
+		unsigned char	*data;
+		int				width;
+		int				height;
+		int				nrChannels;
+		
+		void	bind();
+		void	unbind();
+};
+
 class Material
 {
 	public :
-		Material() { compileShaders(); };
+		Material(const std::string &shadertype, const std::string &texturefile) : shader(shadertype), texture(texturefile) {};
 		~Material() {};
 
-		ShaderProgram shader;
-
-		void compileShaders();
+		ShaderProgram	shader;
+		Texture			texture;
 };

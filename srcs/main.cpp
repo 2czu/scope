@@ -6,23 +6,11 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 18:20:44 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/22 17:14:39 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/24 13:58:34 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include "../includes/scop.hpp"
-#include <SDL2/SDL.h>
-#include <fstream>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <fcntl.h>
-#include <fstream>
-#include <vector>
-#include <stdexcept>
-#include <string>
+#include "../includes/Application.hpp"
 
 // GLuint VBO;
 // GLuint VAO;

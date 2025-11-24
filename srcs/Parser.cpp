@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:13:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/22 17:12:25 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/24 16:32:54 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,36 +26,37 @@ static bool isFloat(std::string& value)
 
 float randomFloat()
 {
-    return (float)(rand()) / (float)(RAND_MAX);
+    return (float)(rand()) / (float)RAND_MAX;
 }
 
-void centerModel(std::vector<Vector3f> &vertices)
+
+void centerModel(std::vector<Vertex> &vertices)
 {
 	Vector3f min(+FLT_MAX, +FLT_MAX, +FLT_MAX);
 	Vector3f max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 
 	for (auto& v : vertices)
 	{
-		if (v.x < min.x) min.x = v.x;
-		if (v.y < min.y) min.y = v.y;
-		if (v.z < min.z) min.z = v.z;
+		if (v.position.x < min.x) min.x = v.position.x;
+		if (v.position.y < min.y) min.y = v.position.y;
+		if (v.position.z < min.z) min.z = v.position.z;
 
-		if (v.x > max.x) max.x = v.x;
-		if (v.y > max.y) max.y = v.y;
-		if (v.z > max.z) max.z = v.z;
+		if (v.position.x > max.x) max.x = v.position.x;
+		if (v.position.y > max.y) max.y = v.position.y;
+		if (v.position.z > max.z) max.z = v.position.z;
 	}
 
 	Vector3f center = (min + max) * 0.5f;
 
 	for (auto& v : vertices)
 	{
-		v -= center;
+		v.position -= center;
 	}
 }
 
 Mesh Parser::parseObjFile(const std::string &filepath)
 {
-	std::vector<Vector3f>		vertices;
+	std::vector<Vertex>			vertices;
 	std::vector<unsigned int>	indices;
 	std::ifstream			ifs(filepath);
 	std::string				line;
@@ -80,9 +81,15 @@ Mesh Parser::parseObjFile(const std::string &filepath)
 			iss >> std::ws;
 			if (!iss.eof() || isFloat(x) == false || isFloat(y) == false || isFloat(z) == false)
 				throw std::runtime_error("Wrong vertices line format");
-			vertices.push_back(Vector3f(std::stof(x), std::stof(y), std::stof(z)));
-			// float rf = randomFloat();
-			// vertices.push_back(Vector3f(rf, rf, rf));
+
+			Vertex new_vertex;
+			float rf = clamp(randomFloat(), 0.1f, 0.9f);
+
+			new_vertex.position = Vector3f(std::stof(x), std::stof(y), std::stof(z));
+			new_vertex.color = Vector3f(rf, rf, rf);
+			new_vertex.uv = Vector2f(new_vertex.position.x, new_vertex.position.y).normalized();
+			
+			vertices.push_back(new_vertex);
 			vCount++;
 		}
 		else if (prefix == "f")
@@ -91,11 +98,7 @@ Mesh Parser::parseObjFile(const std::string &filepath)
 			if (!(iss >> i1) || !(iss >> i2) || !(iss >> i3))
 				throw std::runtime_error("Wrong faces/indices line format");
 			iss >> std::ws;
-			if (!iss.eof() && !(iss >> i4))
-				throw std::runtime_error("Wrong faces/indices line format");
-			iss >> std::ws;
-			if (!iss.eof())
-				throw std::runtime_error("Wrong faces/indices line format");
+			iss >> i4;
 			if (i1 && i2 && i3)
 			{
 				indices.push_back(i1 - 1);
@@ -155,6 +158,15 @@ Mesh Parser::parseObjFile(const std::string &filepath)
 	// std::cout << "\n" << vCount << std::endl;
 
 	// std::cout << "\n" << vertices.size() << std::endl;
+
+	
+	std::vector<Vertex>::iterator it = vertices.begin();	
+	std::vector<Vertex>::iterator ite = vertices.end();
+	while (it != ite)
+	{
+		std::cout << (*it).uv.x << ", " << (*it).uv.y << std::endl;
+		it++;
+	}
 
 	centerModel(vertices);
 	Mesh mesh(vertices, indices, iCount);

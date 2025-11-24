@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:57:14 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/22 17:48:39 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/24 15:03:13 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <cmath>
 #include <array>
 #include <iostream>
-
 
 template <typename T>
 T clamp(T value, T minVal, T maxVal)
@@ -29,7 +28,43 @@ inline double degToRad(float degrees) {
     return degrees * M_PI / 180.0;
 }
 
-class Vector3f {
+struct Vector2f {
+public:
+    float x, y;
+
+    Vector2f() : x(0), y(0) {}
+    Vector2f(float x, float y) : x(x), y(y) {}
+    Vector2f(const Vector2f& v) = default;
+    Vector2f& operator=(const Vector2f& v) = default;
+
+    Vector2f operator+(const Vector2f& v) const { return Vector2f(x + v.x, y + v.y); }
+    Vector2f operator-(const Vector2f& v) const { return Vector2f(x - v.x, y - v.y); }
+    Vector2f operator*(float scalar) const { return Vector2f(x * scalar, y * scalar); }
+    Vector2f operator/(float scalar) const { return Vector2f(x / scalar, y / scalar); }
+
+    Vector2f& operator+=(const Vector2f& v) { x += v.x; y += v.y; return *this; }
+    Vector2f& operator-=(const Vector2f& v) { x -= v.x; y -= v.y; return *this; }
+    Vector2f& operator*=(float scalar) { x *= scalar; y *= scalar; return *this; }
+    Vector2f& operator/=(float scalar) { x /= scalar; y /= scalar; return *this; }
+
+    float length() const { return std::sqrt(x*x + y*y); }
+
+    Vector2f normalized() const {
+        float len = length();
+        return (len == 0) ? Vector2f(0, 0) : Vector2f(x / len, y / len);
+    }
+
+    float dot(const Vector2f& v) const { return x * v.x + y * v.y; }
+
+    void print() const { std::cout << "(" << x << ", " << y << ")\n"; }
+};
+
+inline Vector2f operator*(float scalar, const Vector2f& v) {
+    return v * scalar;
+}
+
+
+struct Vector3f {
 public:
     float x, y, z;
 
@@ -71,6 +106,12 @@ public:
 inline Vector3f operator*(float scalar, const Vector3f& v) {
     return v * scalar;
 }
+
+struct Vertex {
+    Vector3f position;
+    Vector3f color;
+    Vector2f uv;
+};
 
 
 struct Matrix4f {

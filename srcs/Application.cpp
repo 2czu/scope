@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:31:40 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/23 17:42:58 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/24 16:29:01 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	Application::run(void)
 	{
         this->initialize();
 
-        scene.addObject(Object3D("./assets/objs/42.obj"));
+        scene.addObject(Object3D("./assets/objs/42.obj", "shader", "./assets/textures/test.jpg"));
 		while (running)
 		{
 			LAST = NOW;

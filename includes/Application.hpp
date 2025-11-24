@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:29:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/23 17:40:30 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/24 13:35:05 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ class Application
 		Application();
 		~Application();
 
-		SDL_Window		*window;
-		int				windowWidth;
-		int				windowHeight;
-		SDL_GLContext	glContext;
+		SDL_Window						*window;
+		int								windowWidth;
+		int								windowHeight;
+		SDL_GLContext					glContext;
 
 		Scene			scene;
 		Renderer		renderer;

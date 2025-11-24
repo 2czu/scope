@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:52:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/23 17:16:36 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/24 15:00:48 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 class Mesh
 {	
 	public :
-		Mesh(std::vector<Vector3f> &vertices, std::vector<unsigned int> &indices, unsigned int indexCount);
+		Mesh(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, unsigned int indexCount);
 		Mesh() {};
 		~Mesh() {};
 		
