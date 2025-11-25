@@ -1,0 +1,82 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   EventHandler.cpp                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/25 15:13:36 by pacda-si          #+#    #+#             */
+/*   Updated: 2025/11/25 21:09:12 by pacda-si         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/Application.hpp"
+
+EventHandler::EventHandler(Application *application) 
+{
+	this->app = application;
+	for(int i = 0; i < 322; i++)
+		KEYS[i] = false;
+	lmb_down = false;
+};
+
+void	EventHandler::mouseHandler()
+{
+	mouse_x = event.motion.xrel;
+	mouse_y = event.motion.yrel;
+}
+
+void	EventHandler::keysHandler()
+{
+	float camSpeed = 0.05f;
+
+	if (KEYS[SDLK_w])
+		(*app).scene.camera->position += ((*app).scene.camera->front * camSpeed);
+	if (KEYS[SDLK_s])
+		(*app).scene.camera->position -= ((*app).scene.camera->front * camSpeed);
+	if (KEYS[SDLK_a])
+		(*app).scene.camera->position -= ((*app).scene.camera->front.cross((*app).scene.camera->up)).normalized() * camSpeed;
+	if (KEYS[SDLK_d])
+		(*app).scene.camera->position += ((*app).scene.camera->front.cross((*app).scene.camera->up)).normalized() * camSpeed;
+	if (KEYS[SDLK_ESCAPE])
+		(*app).running = false;
+}
+
+void	EventHandler::pollEvents()
+{
+	while (SDL_PollEvent(&event))
+	{
+		if (event.type == SDL_QUIT)
+			(*app).running = false;
+		else if (event.type == SDL_KEYDOWN)
+		{
+			if (event.key.keysym.sym < 322)
+				KEYS[event.key.keysym.sym] = true;
+		}
+		else if (event.type == SDL_KEYUP)
+		{
+			if (event.key.keysym.sym < 322)
+				KEYS[event.key.keysym.sym] = false;
+		}
+		else if (event.type == SDL_MOUSEMOTION)
+		{
+			mouseHandler();
+		}
+		else
+		{
+			mouse_x = 0.0f;
+			mouse_y = 0.0f;
+			std::cout << mouse_x << ", " << mouse_y << std::endl;
+		}
+		// else if (event.type == SDL_MOUSEBUTTONUP)
+		// {
+		// 	lmb_down = false;
+		// 	SDL_ShowCursor(SDL_DISABLE);
+		// }
+		// else if (event.type == SDL_MOUSEBUTTONDOWN)
+		// {
+		// 	lmb_down = true;
+		// 	SDL_ShowCursor(SDL_ENABLE);
+		// }
+	}
+}

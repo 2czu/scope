@@ -6,23 +6,12 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:13:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/24 16:32:54 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/25 20:13:30 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Parser.hpp"
 
-static bool isFloat(std::string& value)
-{
-	std::istringstream iss(value);
-	float f;
-	char c;
-	if (!(iss >> f))
-		return false;
-	if (iss >> c)
-		return false;
-	return true;
-}
 
 float randomFloat()
 {
@@ -54,6 +43,11 @@ void centerModel(std::vector<Vertex> &vertices)
 	}
 }
 
+// Parser::parseMtlFile(const std::string &filepath)
+// {
+	
+// }
+
 Mesh Parser::parseObjFile(const std::string &filepath)
 {
 	std::vector<Vertex>			vertices;
@@ -76,16 +70,17 @@ Mesh Parser::parseObjFile(const std::string &filepath)
 		
 		if (prefix == "v")
 		{
-			std::string x, y, z;
-			iss >> x >> y >> z;
+			float x, y, z;
+			if (!(iss >> x >> y >> z))
+				throw std::runtime_error("Wrong vertices line format");
 			iss >> std::ws;
-			if (!iss.eof() || isFloat(x) == false || isFloat(y) == false || isFloat(z) == false)
+			if (!iss.eof())
 				throw std::runtime_error("Wrong vertices line format");
 
 			Vertex new_vertex;
 			float rf = clamp(randomFloat(), 0.1f, 0.9f);
 
-			new_vertex.position = Vector3f(std::stof(x), std::stof(y), std::stof(z));
+			new_vertex.position = Vector3f(x, y, z);
 			new_vertex.color = Vector3f(rf, rf, rf);
 			new_vertex.uv = Vector2f(new_vertex.position.x, new_vertex.position.y).normalized();
 			
@@ -160,13 +155,13 @@ Mesh Parser::parseObjFile(const std::string &filepath)
 	// std::cout << "\n" << vertices.size() << std::endl;
 
 	
-	std::vector<Vertex>::iterator it = vertices.begin();	
-	std::vector<Vertex>::iterator ite = vertices.end();
-	while (it != ite)
-	{
-		std::cout << (*it).uv.x << ", " << (*it).uv.y << std::endl;
-		it++;
-	}
+	// std::vector<Vertex>::iterator it = vertices.begin();	
+	// std::vector<Vertex>::iterator ite = vertices.end();
+	// while (it != ite)
+	// {
+	// 	std::cout << (*it).uv.x << ", " << (*it).uv.y << std::endl;
+	// 	it++;
+	// }
 
 	centerModel(vertices);
 	Mesh mesh(vertices, indices, iCount);

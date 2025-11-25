@@ -6,7 +6,7 @@
 #    By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/23 16:41:00 by pacda-si          #+#    #+#              #
-#    Updated: 2025/11/25 20:06:48 by pacda-si         ###   ########.fr        #
+#    Updated: 2025/11/25 20:05:11 by pacda-si         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,57 +35,43 @@ BG_ULTRA_BLUE   = \033[48;5;21m
 BG_MAGENTA      = \033[48;5;201m
 
 # ────────────────────────────── Files ───────────────────────────────
-NAME        = scop
-SRCS_DIR    = ./srcs
+# Build imgui as a static library with OpenGL3 + SDL2 backends
+LIB_NAME    = libimgui.a
 
-SRCS        = $(SRCS_DIR)/main.cpp \
-			  $(SRCS_DIR)/glad.c \
-			  $(SRCS_DIR)/Shader.cpp \
-			  $(SRCS_DIR)/ShaderProgram.cpp \
-			  $(SRCS_DIR)/Application.cpp \
-			  $(SRCS_DIR)/Camera.cpp \
-			  $(SRCS_DIR)/Material.cpp \
-			  $(SRCS_DIR)/Mesh.cpp \
-			  $(SRCS_DIR)/Object3D.cpp \
-			  $(SRCS_DIR)/Parser.cpp \
-			  $(SRCS_DIR)/Renderer.cpp \
-			  $(SRCS_DIR)/Scene.cpp \
-			  $(SRCS_DIR)/Texture.cpp \
-			  $(SRCS_DIR)/EventHandler.cpp \
-			  $(SRCS_DIR)/Transform.cpp
-			  
+SRCS        = imgui.cpp \
+			  imgui_draw.cpp \
+			  imgui_tables.cpp \
+			  imgui_widgets.cpp \
+			  imgui_demo.cpp \
+			  imgui_impl_opengl3.cpp \
+			  imgui_impl_sdl2.cpp
 
 OBJS_DIR    = objs
-OBJS        = $(SRCS:$(SRCS_DIR)/%.cpp=$(OBJS_DIR)/%.o)
+OBJS        = $(SRCS:%.cpp=$(OBJS_DIR)/%.o)
 
-HEADERS =	includes/
-
-IMGUI_DIR   = ./third_party/imgui
-IMGUI_LIB   = $(IMGUI_DIR)/libimgui.a
-IMGUI_FLAGS = -I$(IMGUI_DIR) -I./third_party/glad -I./third_party/KHR
-
-OGL_FLAGS   = -lGL -lGLU -lglut -lSDL2
-
+# Include directories for imgui headers and dependencies
+CXXFLAGS_INCLUDES = -I. \
+					-I../glad \
+					-I../KHR \
+					$(shell pkg-config --cflags sdl2)
 
 # ────────────────────────────── Compiler ────────────────────────────
 CXX         = g++
-CXXFLAGS    = -Werror -Wall -Wextra -g3
+AR          = ar
+CXXFLAGS    = -Werror -Wall -Wextra -g3 -fPIC $(CXXFLAGS_INCLUDES)
+ARFLAGS     = rcs
 
 # ────────────────────────────── Rules ───────────────────────────────
-all: $(NAME)
+all: $(LIB_NAME)
 
-$(NAME): $(IMGUI_LIB) $(OBJS) $(HEADERS)
-	@echo "$(BLOOD_RED)$(BOLD)Making $(NAME)...$(RESET)"
-	@$(CXX) $(CXXFLAGS) $(OBJS) $(IMGUI_LIB) $(IMGUI_FLAGS) -o $(NAME) $(OGL_FLAGS)
-	@echo "$(NEON_GREEN)$(BOLD)Made $(NAME) without any problem. ✔\n$(RESET)"
+$(LIB_NAME): $(OBJS)
+	@echo "$(BLOOD_RED)$(BOLD)Archiving $(LIB_NAME)...$(RESET)"
+	@$(AR) $(ARFLAGS) $(LIB_NAME) $(OBJS)
+	@echo "$(NEON_GREEN)$(BOLD)Built $(LIB_NAME) successfully. ✔\n$(RESET)"
 
-$(IMGUI_LIB):
-	@echo "$(CYAN_SHOCK)$(BOLD)Building imgui library...$(RESET)"
-	@$(MAKE) -C $(IMGUI_DIR)
-	@echo "$(NEON_GREEN)$(BOLD)ImGui library built. ✔$(RESET)"
-
-$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.cpp
-	@mkdir -p $(dir $@)
+$(OBJS_DIR)/%.o: %.cpp
+	@mkdir -p $(OBJS_DIR)
+	@echo "$(CYAN_SHOCK)Compiling $<...$(RESET)"
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
@@ -98,14 +84,13 @@ clean:
 	fi
 
 fclean: clean
-	@if [ -f "$(NAME)" ]; then \
-		echo "$(SUNBURST_YELLOW)$(BOLD)Removing executable..$(RESET)"; \
-		rm -f $(NAME); \
+	@if [ -f "$(LIB_NAME)" ]; then \
+		echo "$(SUNBURST_YELLOW)$(BOLD)Removing library..$(RESET)"; \
+		rm -f $(LIB_NAME); \
 		echo "$(NEON_GREEN)$(BOLD)Done. ✔$(RESET)"; \
 	else \
-		echo "$(CYAN_SHOCK)$(BOLD)No executable to remove. Skipping fclean.$(RESET)"; \
+		echo "$(CYAN_SHOCK)$(BOLD)No library to remove. Skipping fclean.$(RESET)"; \
 	fi
-	@$(MAKE) -C $(IMGUI_DIR) fclean
 
 re: fclean all
 

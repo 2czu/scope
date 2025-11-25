@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:29:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/24 13:35:05 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/25 20:55:42 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,33 @@
 #include <iostream>
 #include "../third_party/glad/glad.h"
 #include "../third_party/KHR/khrplatform.h"
+#include "../third_party/imgui/imgui.h"
+#include "../third_party/imgui/imgui_impl_sdl2.h"
+#include "../third_party/imgui/imgui_impl_opengl3.h"
+// #include "../third_party/imgui/imgui_impl_opengl3_loader.h"
 #include "Renderer.hpp"
 #include "Scene.hpp"
 #include <algorithm>
 #include <memory>
+
+class Application;
+
+struct	EventHandler
+{
+	EventHandler(Application *application);
+	~EventHandler() {};
+
+	SDL_Event	event;
+	Application	*app;
+	bool		KEYS[322];
+	float		mouse_x;
+	float		mouse_y;
+	bool		lmb_down;
+
+	void	mouseHandler();
+	void	keysHandler();
+	void	pollEvents();
+};
 
 class Application
 {
@@ -27,16 +50,18 @@ class Application
 		Application();
 		~Application();
 
-		SDL_Window						*window;
-		int								windowWidth;
-		int								windowHeight;
-		SDL_GLContext					glContext;
+		SDL_Window		*window;
+		SDL_GLContext	glContext;
+		int				windowWidth;
+		int				windowHeight;
 
 		Scene			scene;
 		Renderer		renderer;
+		EventHandler	eventHandler;
+
+		bool			running;
 
 		void			initialize();
 		void			run();
-		void			handleKeys(bool *KEYS, bool &running);
 
 };
