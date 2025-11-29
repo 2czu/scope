@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 15:13:36 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/27 11:11:46 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/29 19:44:58 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,14 @@ void	EventHandler::keysHandler()
 		move_mouse = false;
 		SDL_ShowCursor(SDL_ENABLE);
 	}
+	if (KEYS[SDLK_i])
+		(*app).scene.light->position.y += 0.1f;
+	if (KEYS[SDLK_k])
+		(*app).scene.light->position.y -= 0.1f;
+	if (KEYS[SDLK_j])
+		(*app).scene.light->position.x += 0.1f;
+	if (KEYS[SDLK_l])
+		(*app).scene.light->position.x -= 0.1f;
 }
 
 void	EventHandler::pollEvents()

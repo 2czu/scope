@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:30:07 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/29 19:28:29 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/29 19:41:13 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	Renderer::renderScene(Scene &scene)
 		obj->shader.use();
         obj->shader.setUniformMat4("view", scene.camera->getViewMatrix());
         obj->shader.setUniformMat4("projection", scene.camera->getProjMatrix());
-		obj->transform.setMatrix(Matrix4f::rotationAxis(Vector3f(0.5f, 1.0f, 0.0f), (float)(SDL_GetTicks() / 1000.0f) * (M_PI / 6)));
+		obj->transform.setMatrix(Matrix4f().rotationY(-0.5f));
         obj->shader.setUniformMat4("model", obj->transform.getMatrix());
 
 		obj->shader.setUniformVec3("inLightPos", scene.light->getPos());

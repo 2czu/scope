@@ -2,7 +2,7 @@
 
 layout (location = 0) in vec3 Position;
 layout (location = 1) in vec3 aColor;
-layout (location = 1) in vec3 aNorm;
+layout (location = 2) in vec3 aNorm;
 layout (location = 3) in vec2 aTexCoord;
 
 flat out vec3 ourColor;
