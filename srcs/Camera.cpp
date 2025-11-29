@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 16:20:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/25 21:00:06 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/27 11:06:13 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,19 @@ Camera::Camera(int windowWidth, int windowHeight)
 	aspect_ratio = (float)windowWidth / (float)windowHeight;
 }
 
-void	 Camera::rotateCamera(const float &x, const float &y, const int &windowWidth, const int &windowHeight, const float &frame_time)
+void	 Camera::rotateCamera(const int &x, const int &y, const int &windowWidth, const int &windowHeight, const float &frame_time)
 {
 	static float current_speed_x = 0, current_speed_y = 0;
 
-	(void)windowHeight;
-	(void)windowWidth;
-	// float aspect = (float)windowWidth / (float)windowHeight;
-	float xnorm = x / 127.0f;
-	float ynorm = y / 127.0f;
+	float aspect = (float)windowWidth / (float)windowHeight;
+	float xnorm = x / (float)windowWidth;
+	float ynorm = y / (windowHeight * aspect);
 
-	const float sensitivity = 20.0f;
+	const float sensitivity = 40.0f;
 	float target_speed_x = xnorm * sensitivity;
 	float target_speed_y = ynorm * sensitivity;
 
-	const float max_speed = 40.0f;
+	const float max_speed = 60.0f;
 	target_speed_x = clamp(target_speed_x, -max_speed, max_speed);
 	target_speed_y = clamp(target_speed_y, -max_speed, max_speed);
 

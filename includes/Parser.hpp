@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:02:52 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/22 17:10:08 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/27 12:53:21 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <fstream>
 #include <sstream>
 #include "Mesh.hpp"
+#include "Material.hpp"
 #include <cfloat>
 
 class Parser
@@ -24,5 +25,6 @@ class Parser
 		Parser() {};
 		~Parser() {};
 
-		static Mesh	parseObjFile(const std::string &filepath);
+		static Mesh		loadMesh(const std::string &filepath);
+		static Material	*loadMaterial(const std::string &filepath);
 };

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 12:50:29 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/23 17:42:30 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/29 18:31:14 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include "Object3D.hpp"
 #include "Camera.hpp"
+#include "LightSource.hpp"
 #include <memory>
 #include <algorithm>
 
@@ -25,8 +26,14 @@ class Scene
 		Scene() { camera = NULL; };
 		~Scene() {};
 		
-		std::unique_ptr<Camera>	camera;
-		std::vector<Object3D>	objs;
-		void	addObject(const Object3D &obj);
-		void	setCamera(std::unique_ptr<Camera> camera);
+		std::unique_ptr<Camera>					camera;
+		std::unique_ptr<LightSource>			light;
+		std::vector<std::shared_ptr<Object3D>>	objs;
+
+		void						setCamera(std::unique_ptr<Camera> camera);
+		void						setLight(std::unique_ptr<LightSource> camera);
+
+		std::shared_ptr<Object3D>	createObject(std::string objfile, std::string shaderfile,
+												std::string mtlfile, std::string texture);
+		void						addObject(std::shared_ptr<Object3D>);
 };

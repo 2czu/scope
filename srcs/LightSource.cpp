@@ -1,32 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Object3D.hpp                                       :+:      :+:    :+:   */
+/*   LightSource.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/20 19:03:55 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/29 19:16:59 by pacda-si         ###   ########.fr       */
+/*   Created: 2025/11/29 18:15:59 by pacda-si          #+#    #+#             */
+/*   Updated: 2025/11/29 19:35:13 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Mesh.hpp"
-#include "Material.hpp"
-#include "Parser.hpp"
-#include "Transform.hpp"
+#include "../includes/LightSource.hpp"
 
-class Object3D
+LightSource::LightSource(std::string meshpath, std::string shaderf) : shader(shaderf)
 {
-	private :
-	
-	public :
-		Mesh			mesh;
-		ShaderProgram	shader;
-		Material		*material;
-		Transform		transform;
+	mesh = Parser::loadMesh(meshpath);
 
-		Object3D(const std::string &meshpath, const std::string &shaderf,
-				const std::string &matpath, const std::string &texture);
-		~Object3D() {};
-
-};
+	color = Vector3f(1.0f, 1.0f, 1.0f);
+	position = Vector3f(1.0f, 0.0f, 0.0f);
+}

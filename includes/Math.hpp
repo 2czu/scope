@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:57:14 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/24 15:03:13 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/29 19:16:55 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,9 @@ public:
         );
     }
 
+    const float* data() const { return &x; }
+float* data() { return &x; }
+
     void print() const { std::cout << "(" << x << ", " << y << ", " << z << ")\n"; }
 };
 
@@ -109,6 +112,7 @@ inline Vector3f operator*(float scalar, const Vector3f& v) {
 
 struct Vertex {
     Vector3f position;
+    Vector3f norm;
     Vector3f color;
     Vector2f uv;
 };
@@ -264,9 +268,9 @@ struct Matrix4f {
                        const Vector3f& target,
                        const Vector3f& up)
     {
-        Vector3f f = (target - eye).normalized();   // forward
-        Vector3f s = f.cross(up).normalized();      // right
-        Vector3f u = s.cross(f);                    // true up
+        Vector3f f = (target - eye).normalized();
+        Vector3f s = f.cross(up).normalized();
+        Vector3f u = s.cross(f);
 
         Matrix4f r = Matrix4f::identity();
 
@@ -283,7 +287,6 @@ struct Matrix4f {
         r.m[9] = u.z;
         r.m[10] = -f.z;
 
-        // translation part
         r.m[12] = -s.dot(eye);
         r.m[13] = -u.dot(eye);
         r.m[14] =  f.dot(eye);

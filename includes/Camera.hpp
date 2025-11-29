@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 12:56:26 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/25 20:56:03 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/27 10:44:53 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,6 @@ class Camera
 		Matrix4f getViewMatrix();
 		Matrix4f getProjMatrix();
 
-		void	 rotateCamera(const float &x, const float &y, const int &windowWidth,
+		void	 rotateCamera(const int &x, const int &y, const int &windowWidth,
 								const int &windowHeight, const float &frame_time);
 };

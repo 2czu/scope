@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:13:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/25 20:13:30 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/29 19:34:40 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,101 @@ void centerModel(std::vector<Vertex> &vertices)
 	}
 }
 
-// Parser::parseMtlFile(const std::string &filepath)
-// {
-	
-// }
+template <typename T>
+static void	loadType(std::istringstream &iss, T &var)
+{
+	if (!(iss >> var))
+		throw std::runtime_error("Wrong Vector3f line format");
+	iss >> std::ws;
+	if (!iss.eof())
+		throw std::runtime_error("Wrong Vector3f line format");
+}
 
-Mesh Parser::parseObjFile(const std::string &filepath)
+static void	loadVec3(std::istringstream &iss, Vector3f &vec)
+{
+	if (!(iss >> vec.x >> vec.y >> vec.z))
+
+		throw std::runtime_error("Wrong vertices line format");
+	iss >> std::ws;
+	if (!iss.eof())
+		throw std::runtime_error("Wrong vertices line format");
+}
+
+Material *Parser::loadMaterial(const std::string &filepath)
+{
+	std::ifstream				ifs(filepath);
+	std::string					line;
+
+	Material	*mat = new Material();
+
+	if (!ifs.is_open())
+		throw std::runtime_error("File not found");
+	while (std::getline(ifs, line))
+	{
+		std::istringstream	iss(line);
+		std::string			prefix;
+
+		iss >> prefix;
+		
+		if (prefix == "newmtl")
+		{
+			std::string mtl;
+			if (!(iss >> mtl))
+				throw std::runtime_error("Wrong material name format");
+			mat->name = mtl;
+			
+		}
+		else if (prefix == "Ns")
+			loadType<float>(iss, mat->ns);
+		else if (prefix == "Ka")
+			loadVec3(iss, mat->ka);
+		else if (prefix == "Kd")
+			loadVec3(iss, mat->kd);
+		else if (prefix == "Ks")
+			loadVec3(iss, mat->ks);
+		else if (prefix == "d")
+			loadType<float>(iss, mat->d);
+		else if (prefix == "illum")
+			loadType<float>(iss, mat->illum);
+	}
+
+	mat->print();
+
+	return (mat);
+
+}
+
+
+static void computeVertexNormals(
+    std::vector<Vertex>& vertices,
+    const std::vector<unsigned int>& indices)
+{
+    for (size_t i = 0; i < indices.size(); i += 3)
+    {
+        unsigned int i0 = indices[i];
+        unsigned int i1 = indices[i + 1];
+        unsigned int i2 = indices[i + 2];
+
+        const Vector3f& v0 = vertices[i0].position;
+        const Vector3f& v1 = vertices[i1].position;
+        const Vector3f& v2 = vertices[i2].position;
+
+        Vector3f e1 = v1 - v0;
+        Vector3f e2 = v2 - v0;
+
+        Vector3f faceNormal = e1.cross(e2);
+
+        vertices[i0].norm += faceNormal;
+        vertices[i1].norm += faceNormal;
+        vertices[i2].norm += faceNormal;
+    }
+
+    for (Vertex& v : vertices)
+        v.norm = v.norm.normalized();
+}
+
+
+Mesh Parser::loadMesh(const std::string &filepath)
 {
 	std::vector<Vertex>			vertices;
 	std::vector<unsigned int>	indices;
@@ -70,18 +159,18 @@ Mesh Parser::parseObjFile(const std::string &filepath)
 		
 		if (prefix == "v")
 		{
-			float x, y, z;
-			if (!(iss >> x >> y >> z))
+			Vector3f pos;
+			if (!(iss >> pos.x >> pos.y >> pos.z))
 				throw std::runtime_error("Wrong vertices line format");
 			iss >> std::ws;
 			if (!iss.eof())
 				throw std::runtime_error("Wrong vertices line format");
 
 			Vertex new_vertex;
-			float rf = clamp(randomFloat(), 0.1f, 0.9f);
+			// float rf = clamp(randomFloat(), 0.1f, 0.9f);
 
-			new_vertex.position = Vector3f(x, y, z);
-			new_vertex.color = Vector3f(rf, rf, rf);
+			new_vertex.position = pos;
+			new_vertex.color = Vector3f(0.7f, 0.0f, 0.0f);
 			new_vertex.uv = Vector2f(new_vertex.position.x, new_vertex.position.y).normalized();
 			
 			vertices.push_back(new_vertex);
@@ -164,6 +253,7 @@ Mesh Parser::parseObjFile(const std::string &filepath)
 	// }
 
 	centerModel(vertices);
+	computeVertexNormals(vertices, indices);
 	Mesh mesh(vertices, indices, iCount);
 	return mesh;
 }

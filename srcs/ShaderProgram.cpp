@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:43:46 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/24 16:43:50 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/29 18:59:13 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 ShaderProgram::ShaderProgram(const std::string &shader) : programID(0)
 {
-    std::string vsrc = "./assets/shaders/" + shader + ".vs";
-    std::string fsrc = "./assets/shaders/" + shader + ".fs";
+    std::string vsrc = shader + ".vs";
+    std::string fsrc = shader + ".fs";
 
 	vertex = Shader(vsrc, GL_VERTEX_SHADER);
     fragment = Shader(fsrc, GL_FRAGMENT_SHADER);
@@ -35,6 +35,15 @@ void ShaderProgram::setUniformMat4(const std::string &name, const Matrix4f &mat)
     toSetLoc = glGetUniformLocation(this->programID, name.c_str());
 
     glUniformMatrix4fv(toSetLoc, 1, GL_FALSE, mat.m.data());
+}
+
+void ShaderProgram::setUniformVec3(const std::string &name, const Vector3f &vec)
+{
+    GLuint toSetLoc;
+
+    toSetLoc = glGetUniformLocation(this->programID, name.c_str());
+
+    glUniform3fv(toSetLoc, 1, vec.data());
 }
 
 

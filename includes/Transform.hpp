@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 16:43:40 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/22 15:59:11 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/27 15:33:21 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,13 @@
 class Transform
 {
 	public :
-		Transform() {};
+		Transform() { };
  		~Transform() {};
+
+		Matrix4f m;
 		
+		
+
 		Matrix4f getMatrix();
+		void	 setMatrix(const Matrix4f &m);
 };

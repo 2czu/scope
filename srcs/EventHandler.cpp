@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 15:13:36 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/25 21:09:12 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/27 11:11:46 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,23 @@ EventHandler::EventHandler(Application *application)
 	for(int i = 0; i < 322; i++)
 		KEYS[i] = false;
 	lmb_down = false;
+	mouse_x = 0;
+	mouse_y = 0;
+	move_mouse = false;
 };
 
 void	EventHandler::mouseHandler()
 {
-	mouse_x = event.motion.xrel;
-	mouse_y = event.motion.yrel;
+	SDL_GetMouseState(&mouse_x, &mouse_y);
+	// if ((mouse_moved == false) && ((mouse_x != (*app).windowWidth / 2) || (mouse_y != (*app).windowHeight / 2)))
+	// 	mouse_moved = true;
+	// else
+	// 	mouse_moved = false;
 }
 
 void	EventHandler::keysHandler()
 {
-	float camSpeed = 0.05f;
+	const float camSpeed = 0.05f;
 
 	if (KEYS[SDLK_w])
 		(*app).scene.camera->position += ((*app).scene.camera->front * camSpeed);
@@ -40,6 +46,16 @@ void	EventHandler::keysHandler()
 		(*app).scene.camera->position += ((*app).scene.camera->front.cross((*app).scene.camera->up)).normalized() * camSpeed;
 	if (KEYS[SDLK_ESCAPE])
 		(*app).running = false;
+	if (KEYS[SDLK_v])
+	{
+		move_mouse = true;
+		SDL_ShowCursor(SDL_DISABLE);
+	}
+	if (KEYS[SDLK_b])
+	{
+		move_mouse = false;
+		SDL_ShowCursor(SDL_ENABLE);
+	}
 }
 
 void	EventHandler::pollEvents()
@@ -60,13 +76,19 @@ void	EventHandler::pollEvents()
 		}
 		else if (event.type == SDL_MOUSEMOTION)
 		{
-			mouseHandler();
-		}
-		else
-		{
-			mouse_x = 0.0f;
-			mouse_y = 0.0f;
-			std::cout << mouse_x << ", " << mouse_y << std::endl;
+			if (move_mouse)
+			{
+				SDL_GetMouseState(&mouse_x, &mouse_y);
+				mouse_x -= (*app).windowWidth / 2;
+				mouse_y -= (*app).windowHeight / 2;
+				SDL_WarpMouseInWindow((*app).window, (*app).windowWidth / 2, (*app).windowHeight / 2);	
+			}
+			else
+			{
+				mouse_x = 0;
+				mouse_y = 0;
+			}
+				
 		}
 		// else if (event.type == SDL_MOUSEBUTTONUP)
 		// {

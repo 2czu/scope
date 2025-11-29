@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:31:40 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/25 21:06:37 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/29 18:32:42 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,12 @@ void	Application::initialize(void)
 	ImGuiIO &io = ImGui::GetIO();
 	
 	(void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
 	ImGui::StyleColorsDark();
 
 	ImGui_ImplSDL2_InitForOpenGL(window, glContext);
 	ImGui_ImplOpenGL3_Init("#version 330");
 
-	SDL_SetRelativeMouseMode(SDL_TRUE);
 	SDL_WarpMouseInWindow(window, windowWidth / 2, windowHeight / 2);
 	auto camera = std::make_unique<Camera>(windowWidth, windowHeight);
 
@@ -89,9 +89,12 @@ void	Application::run(void)
 	{
         this->initialize();
 
-		
+		auto light = std::make_unique<LightSource>("./assets/objs/cube.obj", "./assets/shaders/lightCube");
+		scene.setLight(std::move(light));
 
-        scene.addObject(Object3D("./assets/objs/teapot.obj", "shader", "./assets/textures/test.jpg"));
+		std::shared_ptr<Object3D> obj = scene.createObject("42.obj", "shader", "42.mtl", "test.jpg");
+        scene.addObject(obj);
+
 		while (running)
 		{
 			
@@ -104,9 +107,12 @@ void	Application::run(void)
 			eventHandler.pollEvents();
 			eventHandler.keysHandler();
 			
-			scene.camera->rotateCamera(eventHandler.mouse_x, eventHandler.mouse_y,
-					windowWidth, windowHeight, frame_time);
-
+			if (eventHandler.move_mouse)
+			{
+				scene.camera->rotateCamera(eventHandler.mouse_x, eventHandler.mouse_y,
+					windowWidth, windowHeight, frame_time);	
+			}
+		
 			renderer.renderScene(scene);
 
 			SDL_GL_SwapWindow(window);

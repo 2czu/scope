@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:29:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/25 20:55:42 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/29 18:23:00 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@
 // #include "../third_party/imgui/imgui_impl_opengl3_loader.h"
 #include "Renderer.hpp"
 #include "Scene.hpp"
+#include "LightSource.hpp"
 #include <algorithm>
 #include <memory>
+#define	SC_NONE ""
 
 class Application;
 
@@ -35,9 +37,10 @@ struct	EventHandler
 	SDL_Event	event;
 	Application	*app;
 	bool		KEYS[322];
-	float		mouse_x;
-	float		mouse_y;
+	int			mouse_x;
+	int			mouse_y;
 	bool		lmb_down;
+	bool		move_mouse;
 
 	void	mouseHandler();
 	void	keysHandler();

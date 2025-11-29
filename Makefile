@@ -6,7 +6,7 @@
 #    By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/23 16:41:00 by pacda-si          #+#    #+#              #
-#    Updated: 2025/11/25 20:06:48 by pacda-si         ###   ########.fr        #
+#    Updated: 2025/11/29 18:31:31 by pacda-si         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ SRCS        = $(SRCS_DIR)/main.cpp \
 			  $(SRCS_DIR)/Scene.cpp \
 			  $(SRCS_DIR)/Texture.cpp \
 			  $(SRCS_DIR)/EventHandler.cpp \
+			  $(SRCS_DIR)/LightSource.cpp \
 			  $(SRCS_DIR)/Transform.cpp
 			  
 

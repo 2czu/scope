@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:43:52 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/25 14:54:11 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/27 13:54:31 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ class Texture
 		Texture(const std::string &texturefile);
 		~Texture() {};
 
-		unsigned int	textureID;
+		unsigned int	textureID; 
 		unsigned char	*data;
 		int				width;
 		int				height;
@@ -33,9 +33,19 @@ class Texture
 class Material
 {
 	public :
-		Material(const std::string &shadertype, const std::string &texturefile) : shader(shadertype), texture(texturefile) {};
+		Material() : texture(NULL) {};
+		Material(const std::string &texturefile) : texture(NULL) { (void)texturefile; };
 		~Material() {};
 
-		ShaderProgram	shader;
-		Texture			texture;
+		void print() const;
+
+		float			ns;
+		Vector3f		ka;
+		Vector3f		kd;
+		Vector3f		ks;
+		float			d;
+		float			illum;
+		std::string		name;
+
+		Texture			*texture;
 };
