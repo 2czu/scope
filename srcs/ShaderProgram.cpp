@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:43:46 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/29 18:59:13 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:24:43 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,15 @@ void ShaderProgram::setUniformVec3(const std::string &name, const Vector3f &vec)
     toSetLoc = glGetUniformLocation(this->programID, name.c_str());
 
     glUniform3fv(toSetLoc, 1, vec.data());
+}
+
+void ShaderProgram::setUniformFloat(const std::string &name, const float &f)
+{
+    GLuint toSetLoc;
+
+    toSetLoc = glGetUniformLocation(this->programID, name.c_str());
+
+    glUniform1f(toSetLoc, f);
 }
 
 

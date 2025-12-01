@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 15:13:36 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/29 19:44:58 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:08:19 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	EventHandler::keysHandler()
 
 void	EventHandler::pollEvents()
 {
-	while (SDL_PollEvent(&event))
+	while ((*app).running && SDL_PollEvent(&event))
 	{
 		if (event.type == SDL_QUIT)
 			(*app).running = false;

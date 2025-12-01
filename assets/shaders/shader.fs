@@ -9,21 +9,33 @@ in vec3 Norm;
 in vec3 FragPos;
 
 uniform vec3 inLightPos;
+uniform vec3 viewPos;
+
+uniform vec3 mtlAmbient;
+uniform vec3 mtlDiffuse;
+uniform vec3 mtlSpecular;
+uniform float mtlShininess;
 
 uniform sampler2D ourTexture;
 
 void main()
 {
-	float ambientStrength = 0.1;
-    vec3 ambient = ambientStrength * lightColor;
+    vec3 norm = normalize(Norm);
+    vec3 lightDir = normalize(inLightPos - FragPos);
+    vec3 viewDir  = normalize(viewPos - FragPos);
 
-	vec3 norm = normalize(Norm);
-	vec3 lightDir = normalize(inLightPos - FragPos);
+    vec3 ambient = mtlAmbient * lightColor;
 
-	float diff = max(dot(norm, lightDir), 0.0);
-	vec3 diffuse = diff * lightColor;
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = diff * (lightColor * mtlDiffuse);
 
-    vec3 result = (ambient + diffuse) * ourColor;
+    float shininess = max(mtlShininess, 2.0);
+    vec3 reflectDir = reflect(-lightDir, norm);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+    vec3 specular = lightColor * mtlSpecular * spec;
 
-	FragColor = vec4(result, 1.0);
+    vec3 result = ambient + diffuse + specular;
+    result *= ourColor;
+
+    FragColor = vec4(result, 1.0);
 }

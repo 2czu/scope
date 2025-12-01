@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:40:17 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/29 18:59:39 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:26:58 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ class ShaderProgram
 
 		void				setUniformMat4(const std::string &name, const Matrix4f &mat);
 		void 				setUniformVec3(const std::string &name, const Vector3f &vec);
+		void 				setUniformFloat(const std::string &name, const float &f);
 
 		void				link(void);
 		void				use();

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:57:14 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/29 19:16:55 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/01 15:46:26 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,12 @@ float* data() { return &x; }
 
 inline Vector3f operator*(float scalar, const Vector3f& v) {
     return v * scalar;
+}
+
+inline std::ostream &operator<<(std::ostream &out, const Vector3f &v)
+{
+    out << "[" << v.x << "; " << v.y << "; " << v.z << "]";
+    return (out);
 }
 
 struct Vertex {

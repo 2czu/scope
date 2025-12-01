@@ -6,11 +6,12 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:13:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/29 19:34:40 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:58:54 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Parser.hpp"
+#include <unordered_map>
 
 
 float randomFloat()
@@ -170,7 +171,7 @@ Mesh Parser::loadMesh(const std::string &filepath)
 			// float rf = clamp(randomFloat(), 0.1f, 0.9f);
 
 			new_vertex.position = pos;
-			new_vertex.color = Vector3f(0.7f, 0.0f, 0.0f);
+			new_vertex.color = Vector3f(1.0f, 1.0f, 1.0f);
 			new_vertex.uv = Vector2f(new_vertex.position.x, new_vertex.position.y).normalized();
 			
 			vertices.push_back(new_vertex);
