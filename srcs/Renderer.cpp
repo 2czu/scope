@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:30:07 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/01 17:01:13 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:11:41 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void	Renderer::renderScene(Scene &scene)
         obj->shader.setUniformMat4("model", obj->transform.getMatrix());
 
 
-		scene.light->setColor(Vector3f(sin((float)(SDL_GetTicks() / 1000.0f)* 2.0f), sin((float)(SDL_GetTicks() / 1000.0f) * 0.7f), sin((float)(SDL_GetTicks() / 1000.0f) * 1.3f)));
+		// scene.light->setColor(Vector3f(sin((float)(SDL_GetTicks() / 1000.0f)* 2.0f), sin((float)(SDL_GetTicks() / 1000.0f) * 0.7f), sin((float)(SDL_GetTicks() / 1000.0f) * 1.3f)));
+		
 		obj->shader.setUniformVec3("inLightPos", scene.light->getPos());
 		obj->shader.setUniformVec3("lightColor", scene.light->getColor());
 		obj->shader.setUniformVec3("viewPos", scene.camera->position);
@@ -44,7 +45,7 @@ void	Renderer::renderScene(Scene &scene)
 		obj->shader.setUniformFloat("mtlShininess", obj->material->ns);
 
 
-		std::cout << "light pos: " << scene.light->getPos() << ", camera pos: " << scene.camera->position << std::endl;
+		// std::cout << "light pos: " << scene.light->getPos() << ", camera pos: " << scene.camera->position << std::endl;
 		// obj.material.texture.bind();
 		
         obj->mesh.draw();
