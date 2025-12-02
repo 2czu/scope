@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:31:40 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/02 21:06:15 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/02 21:09:00 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	Application::run(void)
 		auto light = std::make_unique<LightSource>("./assets/objs/cube.obj", "./assets/shaders/lightCube");
 		scene.setLight(std::move(light));
 
-		std::shared_ptr<Object3D> obj = scene.createObject("spk.obj", "shader", "ruby.mtl", "brickc.png");
+		std::shared_ptr<Object3D> obj = scene.createObject("spk.obj", "shader", "jade.mtl", "brickc.png");
         scene.addObject(obj);
 
 		while (running)
