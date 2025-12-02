@@ -1,8 +1,8 @@
 
-# Blender MTL File: 'None'
+# Blender MTL File: 'Ruby'
 # Material Count: 1
 
-newmtl None
+newmtl Ruby
 Ns 0.6
 Ka 0.1745 0.01175 0.01175
 Kd 0.61424 	0.04136 0.04136

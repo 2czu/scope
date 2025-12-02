@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:30:07 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/01 17:11:41 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/02 19:44:39 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	Renderer::renderScene(Scene &scene)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	scene.light->shader.use();
 	scene.light->shader.setUniformMat4("view", scene.camera->getViewMatrix());
@@ -35,22 +35,30 @@ void	Renderer::renderScene(Scene &scene)
 
 		// scene.light->setColor(Vector3f(sin((float)(SDL_GetTicks() / 1000.0f)* 2.0f), sin((float)(SDL_GetTicks() / 1000.0f) * 0.7f), sin((float)(SDL_GetTicks() / 1000.0f) * 1.3f)));
 		
-		obj->shader.setUniformVec3("inLightPos", scene.light->getPos());
-		obj->shader.setUniformVec3("lightColor", scene.light->getColor());
+		Vector3f &lightColor = scene.light->getColor();
+		obj->shader.setUniformVec3("light.position", scene.light->getPos());
+		obj->shader.setUniformVec3("light.ambient", lightColor * 1.0f);
+		obj->shader.setUniformVec3("light.diffuse", lightColor * 1.0f);
+		obj->shader.setUniformVec3("light.specular", lightColor * 1.0f);
+		obj->shader.setUniformFloat("light.constant", 1.0f);
+		obj->shader.setUniformFloat("light.linear", 0.14);
+		obj->shader.setUniformFloat("light.quadratic", 0.07f);
 		obj->shader.setUniformVec3("viewPos", scene.camera->position);
-
-		obj->shader.setUniformVec3("mtlAmbient", obj->material->ka);
-		obj->shader.setUniformVec3("mtlDiffuse", obj->material->kd);
-		obj->shader.setUniformVec3("mtlSpecular", obj->material->ks);
-		obj->shader.setUniformFloat("mtlShininess", obj->material->ns);
+		obj->shader.setUniformInt("applyTexture", 0);
+		
+		obj->shader.setUniformVec3("material.ambient", obj->material->ka);
+		obj->shader.setUniformVec3("material.diffuse", obj->material->kd);
+		obj->shader.setUniformVec3("material.specular", obj->material->ks);
+		obj->shader.setUniformFloat("material.shininess", obj->material->ns);
+		obj->shader.setUniformFloat("material.alpha", obj->material->d);
 
 
 		// std::cout << "light pos: " << scene.light->getPos() << ", camera pos: " << scene.camera->position << std::endl;
-		// obj.material.texture.bind();
+		obj->material->texture->bind();
 		
         obj->mesh.draw();
 		
-		// obj.material.texture.unbind();
+		obj->material->texture->unbind();
 	}
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();

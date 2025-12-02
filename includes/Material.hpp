@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:43:52 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/27 13:54:31 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/02 18:57:51 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ class Texture
 		~Texture() {};
 
 		unsigned int	textureID; 
-		unsigned char	*data;
+		uint16_t		*data;
 		int				width;
 		int				height;
 		int				nrChannels;

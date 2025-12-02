@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:45:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/29 17:48:21 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/02 19:38:44 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,11 @@ Mesh::Mesh(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, un
 
 void Mesh::draw(void)
 {
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    // glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
 
     glBindVertexArray(VAO);

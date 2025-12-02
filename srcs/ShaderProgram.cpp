@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:43:46 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/01 16:24:43 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/02 18:44:01 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,15 @@ void ShaderProgram::setUniformFloat(const std::string &name, const float &f)
     toSetLoc = glGetUniformLocation(this->programID, name.c_str());
 
     glUniform1f(toSetLoc, f);
+}
+
+void ShaderProgram::setUniformInt(const std::string &name, const int &i)
+{
+    GLuint toSetLoc;
+
+    toSetLoc = glGetUniformLocation(this->programID, name.c_str());
+
+    glUniform1i(toSetLoc, i);
 }
 
 

@@ -1,0 +1,10 @@
+# Blender MTL File: 'Jade'
+# Material Count: 1
+
+newmtl Jade
+Ns 0.1
+Ka 0.135 0.2225 0.1575
+Kd 0.54 0.89 0.63
+Ks 0.316228 0.316228 0.316228
+d 1
+illum 2

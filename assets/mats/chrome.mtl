@@ -1,0 +1,11 @@
+
+# Blender MTL File: 'Chrome'
+# Material Count: 1
+
+newmtl Chrome
+Ns 0.6
+Ka 0.25 0.25 0.25
+Kd 0.4 0.4 0.4
+Ks 0.774597 0.774597 0.774597
+d 1.0
+illum 2
