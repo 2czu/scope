@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:30:07 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/02 19:44:39 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/02 20:24:49 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ void	Renderer::renderScene(Scene &scene)
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::Begin("frame test");
+	ImGui::Begin("Interface");
 
-	ImGui::Text("text test");
+	ImGui::ColorEdit3("LIGHT COLOR", scene.light->color.data());
 	
 	ImGui::End();
 
