@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:13:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/02 15:27:14 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:00:39 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,11 @@ static void	loadVec3(std::istringstream &iss, Vector3f &vec)
 		throw std::runtime_error("Wrong vertices line format");
 }
 
-Material *Parser::loadMaterial(const std::string &filepath)
+void loadMaterials(std::unordered_map<std::string, Material *> &mats, const std::string &filepath)
 {
 	std::ifstream				ifs(filepath);
 	std::string					line;
-
-	Material	*mat = new Material();
+	Material					*current = NULL;
 
 	if (!ifs.is_open())
 		throw std::runtime_error("File not found");
@@ -85,26 +84,29 @@ Material *Parser::loadMaterial(const std::string &filepath)
 			std::string mtl;
 			if (!(iss >> mtl))
 				throw std::runtime_error("Wrong material name format");
-			mat->name = mtl;
-			
+			if (mats.find(mtl) == mats.end())
+			{
+				Material	*mat = new Material();
+				mats[mtl] = mat;
+			}
+			current = mats[mtl];
 		}
-		else if (prefix == "Ns")
-			loadType<float>(iss, mat->ns);
-		else if (prefix == "Ka")
-			loadVec3(iss, mat->ka);
-		else if (prefix == "Kd")
-			loadVec3(iss, mat->kd);
-		else if (prefix == "Ks")
-			loadVec3(iss, mat->ks);
-		else if (prefix == "d")
-			loadType<float>(iss, mat->d);
-		else if (prefix == "illum")
-			loadType<float>(iss, mat->illum);
+		if (current)
+		{
+			if (prefix == "Ns")
+				loadType<float>(iss, current->ns);
+			else if (prefix == "Ka")
+				loadVec3(iss, current->ka);
+			else if (prefix == "Kd")
+				loadVec3(iss, current->kd);
+			else if (prefix == "Ks")
+				loadVec3(iss, current->ks);
+			else if (prefix == "d")
+				loadType<float>(iss, current->d);
+			else if (prefix == "illum")
+				loadType<float>(iss, current->illum);
+		}
 	}
-
-	mat->print();
-
-	return (mat);
 
 }
 
@@ -140,13 +142,21 @@ static void computeVertexNormals(
 
 Mesh Parser::loadMesh(const std::string &filepath)
 {
-	std::vector<Vertex>			vertices;
-	std::vector<unsigned int>	indices;
+	std::vector<Vertex>							vertices;
+	std::vector<unsigned int>					indices;
+	std::unordered_map<std::string, Material *> materials;
+	std::unordered_map<Material *, subMesh>		matToSubmesh;
+	std::vector<subMesh>						submeshes;		
+	Material*									currentMat;
+	subMesh*									currentSubmesh;
+
 	std::ifstream			ifs(filepath);
 	std::string				line;
 	unsigned int			vCount = 0;
 	unsigned int			iCount = 0;
 	
+	loadMaterials(materials, filepath);
+
 	srand(time(NULL));
 
 	if (!ifs.is_open())
@@ -186,12 +196,18 @@ Mesh Parser::loadMesh(const std::string &filepath)
 			iss >> i4;
 			if (i1 && i2 && i3)
 			{
+				currentSubmesh->indices.push_back(i1 - 1);
+				currentSubmesh->indices.push_back(i2 - 1);
+				currentSubmesh->indices.push_back(i3 - 1);
 				indices.push_back(i1 - 1);
 				indices.push_back(i2 - 1);
 				indices.push_back(i3 - 1);
 				iCount++;
 				if (i4)
 				{
+					currentSubmesh->indices.push_back(i1 - 1);
+					currentSubmesh->indices.push_back(i3 - 1);
+					currentSubmesh->indices.push_back(i4 - 1);
 					indices.push_back(i1 - 1);
 					indices.push_back(i3 - 1);
 					indices.push_back(i4 - 1);
@@ -200,61 +216,31 @@ Mesh Parser::loadMesh(const std::string &filepath)
 
 			}
 		}
+		else if (prefix == "usemtl")
+		{
+			std::string mtl;
+			if (!(iss >> mtl))
+				throw std::runtime_error("Wrong material name format");
+			Material *toSearch;
+			if (materials.find(mtl) != materials.end())
+			{
+				toSearch = materials[mtl];
+				if (matToSubmesh.find(toSearch) == matToSubmesh.end())
+				{
+					subMesh newsubMesh;
+					newsubMesh.material = toSearch;
+					matToSubmesh[toSearch] = newsubMesh;
+					submeshes.push_back(newsubMesh);
+				}
+				currentSubmesh = &matToSubmesh[toSearch];
+			}
+		}
 	}
-	
-	// int i = 0;
-
-	// std::vector<float>::iterator it1 = vertices.begin();	
-	// std::vector<float>::iterator ite1 = vertices.end();
-
-	// std::cout << "Vertices :\n";
-	// while (it1 != ite1)
-	// {
-	// 	std::cout << *it1 << " ";
-	// 	i++;
-	// 	if (i == 6)
-	// 	{
-	// 		std::cout << std::endl;
-	// 		i = 0;
-	// 	}
-	// 	it1++;
-	// }
-
-	// i = 0;
-
-	// std::vector<unsigned int>::iterator it = indices.begin();	
-	// std::vector<unsigned int>::iterator ite = indices.end();
-
-	// std::cout << "Indices :\n";
-	// while (it != ite)
-	// {
-	// 	std::cout << *it << " ";
-	// 	i++;
-	// 	if (i == 3)
-	// 	{
-	// 		std::cout << std::endl;
-	// 		i = 0;
-	// 	}
-	// 	it++;
-	// }
-
-	// std::cout << "\n" << iCount << std::endl;
-
-	// std::cout << "\n" << vCount << std::endl;
-
-	// std::cout << "\n" << vertices.size() << std::endl;
-
-	
-	// std::vector<Vertex>::iterator it = vertices.begin();	
-	// std::vector<Vertex>::iterator ite = vertices.end();
-	// while (it != ite)
-	// {
-	// 	std::cout << (*it).uv.x << ", " << (*it).uv.y << std::endl;
-	// 	it++;
-	// }
 
 	centerModel(vertices);
 	computeVertexNormals(vertices, indices);
-	Mesh mesh(vertices, indices, iCount);
+	Mesh mesh;
+	mesh.submeshes = submeshes;
+	mesh.vertices = vertices;
 	return mesh;
 }

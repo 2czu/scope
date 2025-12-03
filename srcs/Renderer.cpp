@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:30:07 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/02 20:24:49 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:12:29 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ void	Renderer::renderScene(Scene &scene)
 
 
 		// std::cout << "light pos: " << scene.light->getPos() << ", camera pos: " << scene.camera->position << std::endl;
-		obj->material->texture->bind();
+		obj->texture->bind();
 		
         obj->mesh.draw();
 		
-		obj->material->texture->unbind();
+		obj->texture->unbind();
 	}
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();

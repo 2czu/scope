@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:45:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/02 19:38:44 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:14:31 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,8 @@
 // 	return textureID;
 // }
 
-Mesh::Mesh(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, unsigned int indexCount)
+Mesh::Mesh(std::vector<Vertex> &vertices)
 {
-    this->indexedVertices = indexCount * 3;
-
 	// std::vector<std::string> faces
 	// {
 	// 	"./skyy/right.png",
@@ -62,14 +60,11 @@ Mesh::Mesh(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, un
 
 	glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
@@ -78,6 +73,15 @@ Mesh::Mesh(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, un
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
     glEnableVertexAttribArray(3);
+
+    for(auto &sm : submeshes)
+    {
+        glGenBuffers(1, &sm.EBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sm.EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sm.indices.size() * sizeof(unsigned int),
+            sm.indices.data(), GL_STATIC_DRAW);
+    }
+
 }
 
 void Mesh::draw(void)
@@ -90,7 +94,12 @@ void Mesh::draw(void)
     glFrontFace(GL_CCW);
 
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, this->indexedVertices, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+
+    for(auto &sm : submeshes)
+    {
+        sm.material->bind(shader);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sm.EBO);
+        glDrawElements(GL_TRIANGLES, sm.indices.size(), GL_UNSIGNED_INT, 0);
+    }
 }
 

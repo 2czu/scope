@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:58:07 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/02 14:59:06 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/03 16:56:28 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,4 +21,13 @@ void Material::print() const {
 	std::cout << "d: " << d << "\n";
 	std::cout << "illum: " << illum << "\n";
 	std::cout << "name: " << name << "\n";
+}
+
+void Material::bind(ShaderProgram *shader)
+{
+	shader->setUniformVec3("material.ambient", ka);
+	shader->setUniformVec3("material.diffuse", kd);
+	shader->setUniformVec3("material.specular", ks);
+	shader->setUniformFloat("material.shininess", ns);
+	shader->setUniformFloat("material.alpha", d);
 }

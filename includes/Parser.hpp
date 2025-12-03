@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:02:52 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/27 12:53:21 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:08:14 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,4 @@ class Parser
 		~Parser() {};
 
 		static Mesh		loadMesh(const std::string &filepath);
-		static Material	*loadMaterial(const std::string &filepath);
 };
