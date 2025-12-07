@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:45:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/03 17:14:31 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/07 20:44:56 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 // 	return textureID;
 // }
 
-Mesh::Mesh(std::vector<Vertex> &vertices)
+Mesh::Mesh(std::vector<Vertex> &vertices, std::vector<subMesh> &submeshes) : texture(NULL)
 {
 	// std::vector<std::string> faces
 	// {
@@ -74,7 +74,9 @@ Mesh::Mesh(std::vector<Vertex> &vertices)
     glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
     glEnableVertexAttribArray(3);
 
-    for(auto &sm : submeshes)
+    this->submeshes = submeshes;
+
+    for(auto &sm : this->submeshes)
     {
         glGenBuffers(1, &sm.EBO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sm.EBO);
@@ -84,9 +86,45 @@ Mesh::Mesh(std::vector<Vertex> &vertices)
 
 }
 
+Mesh::Mesh(const Mesh &other)
+{
+    this->submeshes = other.submeshes;
+    this->VAO = other.VAO;
+    this->VBO = other.VBO;
+    this->vertices = other.vertices;
+    this->shader = other.shader;
+    this->texture = other.texture;
+}
+
+Mesh &Mesh::operator=(const Mesh &other)
+{
+    if (this != &other)
+    {
+        this->submeshes = other.submeshes;
+        this->VAO = other.VAO;
+        this->VBO = other.VBO;
+        this->vertices = other.vertices;
+        this->shader = other.shader;
+        this->texture = other.texture;
+    }
+    return (*this);
+}
+
+Mesh::~Mesh()
+{
+    // if (texture)
+    //     delete texture;
+    // for (auto &submesh : submeshes)
+    // {
+    //     if (submesh.material)
+    //         delete submesh.material;
+    // }
+}
+
 void Mesh::draw(void)
 {
 
+    static int x = 0;
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);
@@ -95,11 +133,16 @@ void Mesh::draw(void)
 
     glBindVertexArray(VAO);
 
+    // texture->bind();
     for(auto &sm : submeshes)
     {
         sm.material->bind(shader);
+        if (x == 1)
+            sm.material->print();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sm.EBO);
         glDrawElements(GL_TRIANGLES, sm.indices.size(), GL_UNSIGNED_INT, 0);
     }
+    x++;
+    // texture->unbind();
 }
 

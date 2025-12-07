@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:43:52 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/03 17:16:53 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/06 15:10:35 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ class Material
 {
 	public :
 		Material() : texture(NULL) {};
-		Material(const std::string &texturefile, ShaderProgram *shader) : texture(NULL) { (void)texturefile; };
 		~Material() {};
 
 		void print() const;

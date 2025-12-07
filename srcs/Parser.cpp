@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:13:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/03 17:00:39 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/07 19:42:07 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void loadMaterials(std::unordered_map<std::string, Material *> &mats, const std:
 			if (mats.find(mtl) == mats.end())
 			{
 				Material	*mat = new Material();
+				mat->name = mtl;
 				mats[mtl] = mat;
 			}
 			current = mats[mtl];
@@ -142,105 +143,116 @@ static void computeVertexNormals(
 
 Mesh Parser::loadMesh(const std::string &filepath)
 {
-	std::vector<Vertex>							vertices;
-	std::vector<unsigned int>					indices;
-	std::unordered_map<std::string, Material *> materials;
-	std::unordered_map<Material *, subMesh>		matToSubmesh;
-	std::vector<subMesh>						submeshes;		
-	Material*									currentMat;
-	subMesh*									currentSubmesh;
+    std::vector<Vertex>              vertices;
+    std::vector<unsigned int>        globalIndices;
+    std::unordered_map<std::string, Material*> materials;
 
-	std::ifstream			ifs(filepath);
-	std::string				line;
-	unsigned int			vCount = 0;
-	unsigned int			iCount = 0;
-	
-	loadMaterials(materials, filepath);
+    std::vector<subMesh>             submeshes;
+    subMesh*                         currentSubmesh = nullptr;
 
-	srand(time(NULL));
+    std::ifstream ifs(filepath);
+    if (!ifs.is_open())
+        throw std::runtime_error("File not found");
 
-	if (!ifs.is_open())
-		throw std::runtime_error("File not found");
-	while (std::getline(ifs, line))
-	{
-		std::istringstream	iss(line);
-		std::string			prefix;
+    std::string line;
+    srand(time(NULL));
 
-		iss >> prefix;
-		
-		if (prefix == "v")
-		{
-			Vector3f pos;
-			if (!(iss >> pos.x >> pos.y >> pos.z))
-				throw std::runtime_error("Wrong vertices line format");
-			iss >> std::ws;
-			if (!iss.eof())
-				throw std::runtime_error("Wrong vertices line format");
+    while (std::getline(ifs, line))
+    {
+        std::istringstream iss(line);
+        std::string token;
+        iss >> token;
 
-			Vertex new_vertex;
-			// float rf = clamp(randomFloat(), 0.1f, 0.9f);
+        if (token == "v")
+        {
+            Vector3f pos;
+            if (!(iss >> pos.x >> pos.y >> pos.z))
+                throw std::runtime_error("Bad vertex line");
 
-			new_vertex.position = pos;
-			new_vertex.color = Vector3f(1.0f, 1.0f, 1.0f);
-			new_vertex.uv = Vector2f(new_vertex.position.x, new_vertex.position.y).normalized();
-			
-			vertices.push_back(new_vertex);
-			vCount++;
-		}
-		else if (prefix == "f")
-		{
-			unsigned int i1, i2, i3, i4 = 0;
-			if (!(iss >> i1) || !(iss >> i2) || !(iss >> i3))
-				throw std::runtime_error("Wrong faces/indices line format");
-			iss >> std::ws;
-			iss >> i4;
-			if (i1 && i2 && i3)
-			{
-				currentSubmesh->indices.push_back(i1 - 1);
-				currentSubmesh->indices.push_back(i2 - 1);
-				currentSubmesh->indices.push_back(i3 - 1);
-				indices.push_back(i1 - 1);
-				indices.push_back(i2 - 1);
-				indices.push_back(i3 - 1);
-				iCount++;
-				if (i4)
-				{
-					currentSubmesh->indices.push_back(i1 - 1);
-					currentSubmesh->indices.push_back(i3 - 1);
-					currentSubmesh->indices.push_back(i4 - 1);
-					indices.push_back(i1 - 1);
-					indices.push_back(i3 - 1);
-					indices.push_back(i4 - 1);
-					iCount++;
-				}
+            Vertex v;
+            v.position = pos;
+            v.color = Vector3f(1,1,1);
+            v.uv = Vector2f(pos.x, pos.y).normalized();
 
-			}
-		}
-		else if (prefix == "usemtl")
-		{
-			std::string mtl;
-			if (!(iss >> mtl))
-				throw std::runtime_error("Wrong material name format");
-			Material *toSearch;
-			if (materials.find(mtl) != materials.end())
-			{
-				toSearch = materials[mtl];
-				if (matToSubmesh.find(toSearch) == matToSubmesh.end())
-				{
-					subMesh newsubMesh;
-					newsubMesh.material = toSearch;
-					matToSubmesh[toSearch] = newsubMesh;
-					submeshes.push_back(newsubMesh);
-				}
-				currentSubmesh = &matToSubmesh[toSearch];
-			}
-		}
-	}
+            vertices.push_back(v);
+        }
 
-	centerModel(vertices);
-	computeVertexNormals(vertices, indices);
-	Mesh mesh;
-	mesh.submeshes = submeshes;
-	mesh.vertices = vertices;
-	return mesh;
+        else if (token == "mtllib")
+        {
+            std::string mtlFile;
+            iss >> mtlFile;
+            loadMaterials(materials, "./assets/mats/" + mtlFile);
+        }
+
+        else if (token == "usemtl")
+        {
+            std::string mname;
+            iss >> mname;
+
+            Material* mat = nullptr;
+            if (materials.count(mname))
+                mat = materials[mname];
+
+            bool found = false;
+            for (auto &s : submeshes)
+            {
+                if (s.material == mat)
+                {
+                    currentSubmesh = &s;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                subMesh newS;
+                newS.material = mat;
+                submeshes.push_back(newS);
+                currentSubmesh = &submeshes.back();
+            }
+        }
+
+        else if (token == "f")
+        {
+            if (!currentSubmesh)
+            {
+                subMesh def;
+                def.material = nullptr;
+                submeshes.push_back(def);
+                currentSubmesh = &submeshes.back();
+            }
+
+            unsigned int i1 = 0, i2 = 0, i3 = 0, i4 = 0;
+            if (!(iss >> i1 >> i2 >> i3))
+                throw std::runtime_error("Bad face line");
+
+            iss >> i4;
+
+            currentSubmesh->indices.push_back(i1 - 1);
+            currentSubmesh->indices.push_back(i2 - 1);
+            currentSubmesh->indices.push_back(i3 - 1);
+
+            globalIndices.push_back(i1 - 1);
+            globalIndices.push_back(i2 - 1);
+            globalIndices.push_back(i3 - 1);
+
+            if (i4 != 0)
+            {
+                currentSubmesh->indices.push_back(i1 - 1);
+                currentSubmesh->indices.push_back(i3 - 1);
+                currentSubmesh->indices.push_back(i4 - 1);
+
+                globalIndices.push_back(i1 - 1);
+                globalIndices.push_back(i3 - 1);
+                globalIndices.push_back(i4 - 1);
+            }
+        }
+    }
+
+    centerModel(vertices);
+    computeVertexNormals(vertices, globalIndices);
+
+    Mesh mesh(vertices, submeshes);
+    return mesh;
 }

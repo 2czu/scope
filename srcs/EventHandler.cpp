@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 15:13:36 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/02 20:12:15 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/06 18:02:19 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ void	EventHandler::keysHandler()
 		(*app).scene.light->position.x += 0.1f;
 	if (KEYS[SDLK_l])
 		(*app).scene.light->position.x -= 0.1f;
+	if (KEYS[SDLK_u])
+		(*app).scene.light->position.z += 0.1f;
+	if (KEYS[SDLK_o])
+		(*app).scene.light->position.z -= 0.1f;
+		
 }
 
 void	EventHandler::pollEvents()

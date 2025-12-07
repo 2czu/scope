@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 12:54:41 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/29 18:31:18 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/06 15:30:07 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,12 @@ void	Scene::addObject(std::shared_ptr<Object3D> obj)
 	this->objs.push_back(obj);	
 }
 
-std::shared_ptr<Object3D>	Scene::createObject(std::string objfile, std::string shaderfile,
-												std::string mtlfile, std::string texture)
+std::shared_ptr<Object3D>	Scene::createObject(std::string objfile, std::string shaderfile, std::string texture)
 {
 	objfile = "./assets/objs/" + objfile;
 	shaderfile = "./assets/shaders/" + shaderfile;
-	mtlfile = "./assets/mats/" + mtlfile;
 	texture = "./assets/textures/" + texture;
-	return (std::make_shared<Object3D>(objfile, shaderfile, mtlfile, texture));	
+	return (std::make_shared<Object3D>(objfile, shaderfile, texture));	
 }
 
 

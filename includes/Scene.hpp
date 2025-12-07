@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 12:50:29 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/29 18:31:14 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/06 15:30:14 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ class Scene
 		void						setLight(std::unique_ptr<LightSource> camera);
 
 		std::shared_ptr<Object3D>	createObject(std::string objfile, std::string shaderfile,
-												std::string mtlfile, std::string texture);
+												std::string texture);
 		void						addObject(std::shared_ptr<Object3D>);
 };
