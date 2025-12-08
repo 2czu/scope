@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 15:13:36 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/06 18:02:19 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/08 15:39:56 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,49 +26,56 @@ EventHandler::EventHandler(Application *application)
 void	EventHandler::mouseHandler()
 {
 	SDL_GetMouseState(&mouse_x, &mouse_y);
-	// if ((mouse_moved == false) && ((mouse_x != (*app).windowWidth / 2) || (mouse_y != (*app).windowHeight / 2)))
-	// 	mouse_moved = true;
-	// else
-	// 	mouse_moved = false;
 }
 
-void	EventHandler::keysHandler()
+void EventHandler::keysHandler()
 {
-	const float camSpeed = 0.05f;
+    const float movespeed = (*app).scene.camera->movement_speed;
+    double frame_time = 1.0 / (*app).renderer.displayFPS;
 
-	if (KEYS[SDLK_w])
-		(*app).scene.camera->position += ((*app).scene.camera->front * camSpeed);
-	if (KEYS[SDLK_s])
-		(*app).scene.camera->position -= ((*app).scene.camera->front * camSpeed);
-	if (KEYS[SDLK_a])
-		(*app).scene.camera->position -= ((*app).scene.camera->front.cross((*app).scene.camera->up)).normalized() * camSpeed;
-	if (KEYS[SDLK_d])
-		(*app).scene.camera->position += ((*app).scene.camera->front.cross((*app).scene.camera->up)).normalized() * camSpeed;
-	if (KEYS[SDLK_ESCAPE])
-		(*app).running = false;
-	if (KEYS[SDLK_v])
-	{
-		move_mouse = true;
-		SDL_ShowCursor(SDL_DISABLE);
-	}
-	if (KEYS[SDLK_b])
-	{
-		move_mouse = false;
-		SDL_ShowCursor(SDL_ENABLE);
-	}
-	if (KEYS[SDLK_i])
-		(*app).scene.light->position.y += 0.1f;
-	if (KEYS[SDLK_k])
-		(*app).scene.light->position.y -= 0.1f;
-	if (KEYS[SDLK_j])
-		(*app).scene.light->position.x += 0.1f;
-	if (KEYS[SDLK_l])
-		(*app).scene.light->position.x -= 0.1f;
-	if (KEYS[SDLK_u])
-		(*app).scene.light->position.z += 0.1f;
-	if (KEYS[SDLK_o])
-		(*app).scene.light->position.z -= 0.1f;
-		
+    float camMove = movespeed * frame_time;
+
+    if (KEYS[SDLK_w])
+        (*app).scene.camera->position += (*app).scene.camera->front * camMove;
+    if (KEYS[SDLK_s])
+        (*app).scene.camera->position -= (*app).scene.camera->front * camMove;
+    if (KEYS[SDLK_a])
+        (*app).scene.camera->position -= ((*app).scene.camera->front.cross((*app).scene.camera->up)).normalized() * camMove;
+    if (KEYS[SDLK_d])
+        (*app).scene.camera->position += ((*app).scene.camera->front.cross((*app).scene.camera->up)).normalized() * camMove;
+
+    if (KEYS[SDLK_ESCAPE])
+        (*app).running = false;
+
+    if (KEYS[SDLK_v])
+    {
+        move_mouse = true;
+        SDL_ShowCursor(SDL_DISABLE);
+    }
+    if (KEYS[SDLK_b])
+    {
+        move_mouse = false;
+        SDL_ShowCursor(SDL_ENABLE);
+    }
+
+    float lightMove = movespeed * frame_time;
+    if (KEYS[SDLK_i])
+        (*app).scene.light->position.y += lightMove;
+    if (KEYS[SDLK_k])
+        (*app).scene.light->position.y -= lightMove;
+    if (KEYS[SDLK_j])
+        (*app).scene.light->position.x += lightMove;
+    if (KEYS[SDLK_l])
+        (*app).scene.light->position.x -= lightMove;
+    if (KEYS[SDLK_u])
+        (*app).scene.light->position.z += lightMove;
+    if (KEYS[SDLK_o])
+        (*app).scene.light->position.z -= lightMove;
+
+    if (KEYS[SDLK_1])
+        (*app).renderer.applyTexture = 0;
+    if (KEYS[SDLK_2])
+        (*app).renderer.applyTexture = 1;
 }
 
 void	EventHandler::pollEvents()

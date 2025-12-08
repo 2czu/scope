@@ -12,6 +12,8 @@ in vec3 localPos;
 
 uniform vec3 viewPos;
 
+uniform float texOpacity;
+
 struct Light {
     vec3 position;  
   
@@ -37,7 +39,6 @@ uniform Material material;
 uniform Light light;
 
 uniform sampler2D ourTexture;
-uniform int       applyTexture;
 
 
 vec4 triplanarTexture(sampler2D tex, vec3 pos, vec3 normal, float scale)
@@ -57,19 +58,21 @@ vec4 triplanarTexture(sampler2D tex, vec3 pos, vec3 normal, float scale)
 }
 
 
-vec3 pointLight(Light light, vec3 norm, vec3 fragPos, vec3 viewDir)
+vec3 pointLight(Light light, vec3 norm, vec3 fragPos, vec3 viewDir, vec4 texColor)
 {
+    vec3 actualTexColor = texOpacity * texColor.rgb;
+
     vec3 lightDir = normalize(light.position - FragPos);
 
-    vec3 ambient = material.ambient * light.ambient;
+    vec3 ambient = (((1 - texOpacity) * material.ambient) + actualTexColor) * light.ambient;
 
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * (light.diffuse * material.diffuse);
+    vec3 diffuse = diff * ((((1 - texOpacity) * material.diffuse) + actualTexColor) * light.diffuse);
 
     float shininess = max(material.shininess, 2.0);
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-    vec3 specular = light.specular * material.specular * spec;
+    vec3 specular = light.specular * ((((1 - texOpacity) * material.specular) + actualTexColor) * spec);
 
     float distance = length(light.position - FragPos);
     float attenuation = 1.0 / (light.constant + (light.linear * distance) +
@@ -79,28 +82,19 @@ vec3 pointLight(Light light, vec3 norm, vec3 fragPos, vec3 viewDir)
     diffuse *= attenuation;
     specular *= attenuation;
     return (diffuse);
-} 
+}
 
 void main()
 {
     vec3 norm = normalize(Norm);
     vec3 viewDir  = normalize(viewPos - FragPos);
 
-    vec3 result = pointLight(light, norm, FragPos, viewDir);
-    
     vec4 texColor = triplanarTexture(ourTexture, localPos, localNorm, 1.0);
+    
+    vec3 result = pointLight(light, norm, FragPos, viewDir, texColor);
 
-    if (applyTexture == 0)
-    {
-        result *= faceColor;
+    result *= faceColor;
 
-        FragColor = vec4(result, material.alpha);
-    }
-    else
-    {
-        vec3 resultColor = result * texColor.rgb;
-
-        FragColor = vec4(resultColor, material.alpha * texColor.a);
-    }
+    FragColor = vec4(result, material.alpha * texColor.a);
 
 }

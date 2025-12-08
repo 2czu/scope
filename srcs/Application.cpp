@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:31:40 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/07 20:03:08 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/08 15:40:27 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	Application::initialize(void)
 	ImGui_ImplOpenGL3_Init("#version 330");
 
 	SDL_WarpMouseInWindow(window, windowWidth / 2, windowHeight / 2);
+	SDL_GL_SetSwapInterval(0);
 	auto camera = std::make_unique<Camera>(windowWidth, windowHeight);
 
     scene.setCamera(std::move(camera));
@@ -83,16 +84,17 @@ void	Application::run(void)
 	Uint64 NOW = SDL_GetPerformanceCounter();
 	Uint64 LAST = 0;
 	double frame_time = 0;
+	double time_wasted = 0;
 
 
 	try
 	{
         this->initialize();
 
-		auto light = std::make_unique<LightSource>("./assets/objs/cube.obj", "./assets/shaders/lightCube");
+		auto light = std::make_unique<LightSource>("./assets/objs/sphere.obj", "./assets/shaders/lightCube");
 		scene.setLight(std::move(light));
 
-		std::shared_ptr<Object3D> obj = scene.createObject("spk.obj", "shader", "brickc.png");
+		std::shared_ptr<Object3D> obj = scene.createObject("spk.obj", "shader", "brick.bmp");
         scene.addObject(obj);
 
 		while (running)
@@ -104,16 +106,24 @@ void	Application::run(void)
 			double delta_ms = (double)((NOW - LAST) * 1000 / (double)SDL_GetPerformanceFrequency());
 			frame_time = delta_ms / 1000.0;
 
+			time_wasted += frame_time;
+			if (time_wasted >= 0.1)
+			{
+				renderer.displayFPS = 1.0 / frame_time;
+				time_wasted = 0.0;
+			}
+
 			eventHandler.pollEvents();
 			eventHandler.keysHandler();
-			
+	
 			if (eventHandler.move_mouse)
 			{
 				scene.camera->rotateCamera(eventHandler.mouse_x, eventHandler.mouse_y,
 					windowWidth, windowHeight, frame_time);	
 			}
-		
+
 			renderer.renderScene(scene);
+			renderer.renderImGui(scene);
 
 			SDL_GL_SwapWindow(window);
 		}

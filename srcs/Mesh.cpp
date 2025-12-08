@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:45:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/07 20:44:56 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/08 12:14:13 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,13 +112,13 @@ Mesh &Mesh::operator=(const Mesh &other)
 
 Mesh::~Mesh()
 {
-    // if (texture)
-    //     delete texture;
-    // for (auto &submesh : submeshes)
-    // {
-    //     if (submesh.material)
-    //         delete submesh.material;
-    // }
+    if (texture)
+        delete texture;
+    for (auto &submesh : submeshes)
+    {
+        if (submesh.material)
+            delete submesh.material;
+    }
 }
 
 void Mesh::draw(void)
@@ -128,12 +128,13 @@ void Mesh::draw(void)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);
-    // glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
 
     glBindVertexArray(VAO);
 
-    // texture->bind();
+    if (texture)
+        texture->bind();
     for(auto &sm : submeshes)
     {
         sm.material->bind(shader);
@@ -143,6 +144,7 @@ void Mesh::draw(void)
         glDrawElements(GL_TRIANGLES, sm.indices.size(), GL_UNSIGNED_INT, 0);
     }
     x++;
-    // texture->unbind();
+    if (texture)
+        texture->unbind();
 }
 

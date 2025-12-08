@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 12:56:26 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/27 10:44:53 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/08 15:27:35 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class Camera
 		float			aspect_ratio;
 		float			pitch;
 		float			yaw;
+		float			movement_speed;
 		
 		Matrix4f getViewMatrix();
 		Matrix4f getProjMatrix();

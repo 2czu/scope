@@ -6,11 +6,27 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:58:07 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/06 17:09:31 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/08 16:00:20 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Material.hpp"
+
+Material::Material(const Material &other)
+{
+	this->ns = other.ns;
+	this->kd = other.kd;
+	this->ka = other.ka;
+	this->ks = other.ks;
+	this->d = other.d;
+	this->illum = other.illum;
+	this->name = other.name;
+}
+
+Material *Material::clone(void)
+{
+	return (new Material(*this));
+}
 
 void Material::print() const {
 	std::cout << "Material properties:\n";

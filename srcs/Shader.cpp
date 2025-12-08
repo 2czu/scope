@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 10:39:52 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/21 15:42:50 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/08 10:25:04 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,25 @@ Shader::~Shader()
 {
 	
 }
+
+Shader::Shader(const Shader &other)
+{
+    this->path = other.path;
+    this->type = other.type;
+    this->id = other.id;
+}
+
+Shader &Shader::operator=(const Shader &other)
+{
+    if (this != &other)
+    {
+        this->path = other.path;
+        this->type = other.type;
+        this->id = other.id;
+    }
+    return (*this);
+}
+
 
 static bool readFile(const char* pFileName, std::string &outfile)
 {

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:13:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/07 19:42:07 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/08 16:15:34 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,35 @@ Mesh Parser::loadMesh(const std::string &filepath)
 
             Vertex v;
             v.position = pos;
-            v.color = Vector3f(1,1,1);
+            v.color = Vector3f(1, 1, 1);
+            v.uv = Vector2f(pos.x, pos.y).normalized();
+
+            vertices.push_back(v);
+        }
+
+        else if (token == "vt")
+        {
+            Vector3f pos;
+            if (!(iss >> pos.x >> pos.y >> pos.z))
+                throw std::runtime_error("Bad vertex line");
+
+            Vertex v;
+            v.position = pos;
+            v.color = Vector3f(1, 1, 1);
+            v.uv = Vector2f(pos.x, pos.y).normalized();
+
+            vertices.push_back(v);
+        }
+
+        else if (token == "vn")
+        {
+            Vector3f pos;
+            if (!(iss >> pos.x >> pos.y >> pos.z))
+                throw std::runtime_error("Bad vertex line");
+
+            Vertex v;
+            v.position = pos;
+            v.color = Vector3f(1, 1, 1);
             v.uv = Vector2f(pos.x, pos.y).normalized();
 
             vertices.push_back(v);
@@ -207,7 +235,7 @@ Mesh Parser::loadMesh(const std::string &filepath)
             if (!found)
             {
                 subMesh newS;
-                newS.material = mat;
+                newS.material = mat->clone();
                 submeshes.push_back(newS);
                 currentSubmesh = &submeshes.back();
             }
@@ -252,6 +280,12 @@ Mesh Parser::loadMesh(const std::string &filepath)
 
     centerModel(vertices);
     computeVertexNormals(vertices, globalIndices);
+    for (auto &p : materials)
+    {
+        if (p.second)
+            delete(p.second);
+    }
+    materials.clear();
 
     Mesh mesh(vertices, submeshes);
     return mesh;

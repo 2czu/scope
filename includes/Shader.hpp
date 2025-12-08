@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 10:37:13 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/24 13:15:03 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/08 10:23:44 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ class Shader
 	public:
 		Shader() {};
 		Shader(const std::string& shaderPath, GLenum shaderType);
+		Shader(const Shader &other);
+		Shader &operator=(const Shader &other);
 		~Shader();
 
     unsigned int	compile();

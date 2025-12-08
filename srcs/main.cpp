@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 18:20:44 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/24 13:58:34 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/08 15:58:40 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@
 //     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 //     Image textoure = loadPPM("./textures/kirby.ppm");
-
 //     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textoure.width, textoure.height, 0, GL_RGB, GL_UNSIGNED_BYTE, textoure.pixels.data());
 //     glGenerateMipmap(GL_TEXTURE_2D);
 // }

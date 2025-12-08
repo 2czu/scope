@@ -6,14 +6,34 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:30:07 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/07 19:31:11 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/08 15:31:57 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Renderer.hpp"
 
+void	Renderer::renderImGui(Scene &scene)
+{
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
+
+	ImGui::Begin("Interface");
+
+	ImGui::Text("FPS : %f", displayFPS);
+	ImGui::ColorEdit3("LIGHT COLOR", scene.light->color.data());
+	
+	ImGui::End();
+
+	ImGui::Render();
+
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
 void	Renderer::renderScene(Scene &scene)
 {
+	static float texOpacity = 0.0f;
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -32,7 +52,6 @@ void	Renderer::renderScene(Scene &scene)
 		obj->transform.setMatrix(Matrix4f::rotationAxis(Vector3f(0.0f, 1.0f, 0.0f), (float)(SDL_GetTicks() / 1000.0f) * (M_PI / 4)));
         obj->shader.setUniformMat4("model", obj->transform.getMatrix());
 
-
 		// scene.light->setColor(Vector3f(sin((float)(SDL_GetTicks() / 1000.0f)* 2.0f), sin((float)(SDL_GetTicks() / 1000.0f) * 0.7f), sin((float)(SDL_GetTicks() / 1000.0f) * 1.3f)));
 		
 		Vector3f &lightColor = scene.light->getColor();
@@ -44,24 +63,24 @@ void	Renderer::renderScene(Scene &scene)
 		obj->shader.setUniformFloat("light.linear", 0.14);
 		obj->shader.setUniformFloat("light.quadratic", 0.07f);
 		obj->shader.setUniformVec3("viewPos", scene.camera->position);
-		obj->shader.setUniformInt("applyTexture", 0);
 
+		if (applyTexture == 1)
+		{
+			texOpacity += 0.025f;
+			if (texOpacity >= 1.0f)
+				texOpacity = 1.0f;
+		}
+		else
+		{
+			texOpacity -= 0.025f;
+			if (texOpacity <= 0.0f)
+				texOpacity = 0.0f;
+		}
+
+		obj->shader.setUniformFloat("texOpacity", texOpacity);
 		// std::cout << "light pos: " << scene.light->getPos() << ", camera pos: " << scene.camera->position << std::endl;
 		
         obj->mesh.draw();
 		
 	}
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame();
-	ImGui::NewFrame();
-
-	ImGui::Begin("Interface");
-
-	ImGui::ColorEdit3("LIGHT COLOR", scene.light->color.data());
-	
-	ImGui::End();
-
-	ImGui::Render();
-
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

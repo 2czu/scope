@@ -6,13 +6,19 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:43:52 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/06 15:10:35 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/08 14:58:18 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "ShaderProgram.hpp"
+
+struct Image {
+    unsigned int width;
+    unsigned int height;
+    std::vector<unsigned char> pixels;
+};
 
 class Texture
 {
@@ -21,10 +27,7 @@ class Texture
 		~Texture() {};
 
 		unsigned int	textureID; 
-		uint16_t		*data;
-		int				width;
-		int				height;
-		int				nrChannels;
+		Image			image;
 		
 		void	bind();
 		void	unbind();
@@ -33,11 +36,13 @@ class Texture
 class Material
 {
 	public :
-		Material() : texture(NULL) {};
+		Material()  {};
+		Material(const Material &other);
 		~Material() {};
 
-		void print() const;
-		void bind(ShaderProgram *shader);
+		void		print() const;
+		void		bind(ShaderProgram *shader);
+		Material	*clone(void);
 
 		float			ns;
 		Vector3f		ka;
@@ -47,5 +52,4 @@ class Material
 		float			illum;
 		std::string		name;
 
-		Texture			*texture;
 };

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:43:46 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/02 18:44:01 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/08 10:36:51 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,24 @@ ShaderProgram::ShaderProgram(const std::string &shader) : programID(0)
     fragment = Shader(fsrc, GL_FRAGMENT_SHADER);
 
     link();
+}
+
+ShaderProgram::ShaderProgram(const ShaderProgram &other)
+{
+    this->fragment = other.fragment;
+    this->vertex = other.vertex;
+    this->programID = other.programID;
+}
+
+ShaderProgram &ShaderProgram::operator=(const ShaderProgram &other)
+{
+    if (this != &other)
+    {
+        this->fragment = other.fragment;
+        this->vertex = other.vertex;
+        this->programID = other.programID;
+    }
+    return (*this);
 }
 
 ShaderProgram::~ShaderProgram()
