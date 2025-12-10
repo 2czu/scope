@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:13:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/08 16:15:34 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/10 15:35:11 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,9 @@ static void computeVertexNormals(
 
 Mesh Parser::loadMesh(const std::string &filepath)
 {
+    std::vector<Vector3f>              positions;
+    std::vector<Vector2f>              uvs;
+    std::vector<Vector3f>              normals;
     std::vector<Vertex>              vertices;
     std::vector<unsigned int>        globalIndices;
     std::unordered_map<std::string, Material*> materials;

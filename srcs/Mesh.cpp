@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:45:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/08 12:14:13 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/10 15:29:44 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,6 @@ Mesh::~Mesh()
 
 void Mesh::draw(void)
 {
-
-    static int x = 0;
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);
@@ -138,12 +136,9 @@ void Mesh::draw(void)
     for(auto &sm : submeshes)
     {
         sm.material->bind(shader);
-        if (x == 1)
-            sm.material->print();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sm.EBO);
         glDrawElements(GL_TRIANGLES, sm.indices.size(), GL_UNSIGNED_INT, 0);
     }
-    x++;
     if (texture)
         texture->unbind();
 }
