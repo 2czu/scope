@@ -1,8 +1,9 @@
 # scope
 
 A lightweight 3D rendering engine in C++17 using OpenGL 3.3, SDL2 and Dear ImGui. Load different OBJ models, apply Phong lighting, tweak things in real-time via a live UI.
+Math library made from scratch, image loader made from scratch.
 
-![demo](./gifs/main.gif)
+https://github.com/user-attachments/assets/bfa5aa4d-bfdf-44c0-a7ab-438579b10fa5
 
 ## Quick Start
 
@@ -71,7 +72,7 @@ scope/
     └── MTL properties (Ka, Kd, Ks, Ns)
 ```
 
-Each component is in its own file (.hpp/.cpp). Two shaders ship with the engine: shader.vs/.fs (per-object Phong), lightCube.vs/.fs (most basic shader). ImGui builds as a static library (libimgui.a) and links into the main executable.
+Each component is in its own file (.hpp/.cpp). Two shaders ship with the engine: shader.vs/.fs (per-object Phong), lightCube.vs/.fs (basic shader). ImGui builds as a static library (libimgui.a) and links into the main executable.
 
 ## Prerequisites
 
@@ -91,6 +92,6 @@ Enhanced UI. Skybox rendering with cubemaps. Particle system (GPU-driven). Multi
 
 ## Credits
 
-GLAD (OpenGL loader), Dear ImGui (UI), SDL2 (window/input), stb_image (textures)
+GLAD (OpenGL loader), Dear ImGui (UI), SDL2 (window/input),
 
-![demo](./gifs/main.gif)
+https://github.com/user-attachments/assets/b22d43c8-0e81-4d8f-88f8-a3428680947f
