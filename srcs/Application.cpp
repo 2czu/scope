@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:31:40 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/12 11:49:17 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 15:56:52 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 Application::Application() : eventHandler(this)
 {
-    windowWidth = 1920;
-    windowHeight = 1080;
+    windowWidth = 1280;
+    windowHeight = 720;
 	running = true;
 }
 
@@ -97,7 +97,7 @@ void	Application::initialize(void)
 	auto camera = std::make_unique<Camera>(windowWidth, windowHeight);
     scene.setCamera(std::move(camera));
 
-	auto light = std::make_unique<LightSource>("./assets/objs/sphere.obj", "./assets/shaders/lightCube");
+	auto light = std::make_unique<LightSource>("sphere.obj", "lightCube");
 	scene.setLight(std::move(light));
 
 	std::shared_ptr<Object3D> obj = scene.createObject("cube.obj", "shader", "brick.bmp");
