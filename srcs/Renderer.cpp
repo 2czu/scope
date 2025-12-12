@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:30:07 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/10 15:27:28 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 18:45:15 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	Renderer::renderImGui(Scene &scene)
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+// Rendering light and all objects (if there are multiple)
+// texOpacity is just a static variable passed to the shader to make a transition between texture and no texture
 void	Renderer::renderScene(Scene &scene)
 {
 	static float texOpacity = 0.0f;
@@ -43,6 +45,19 @@ void	Renderer::renderScene(Scene &scene)
 	scene.light->shader.setUniformMat4("model", Matrix4f::translation(scene.light->getPos()) * Matrix4f::scaling(Vector3f(0.2f, 0.2f, 0.2f)));
 	scene.light->shader.setUniformVec3("lightColor", scene.light->getColor());
 	scene.light->mesh.draw();
+
+	if (applyTexture == 1)
+	{
+		texOpacity += 0.025f;
+		if (texOpacity >= 1.0f)
+			texOpacity = 1.0f;
+	}
+	else
+	{
+		texOpacity -= 0.025f;
+		if (texOpacity <= 0.0f)
+			texOpacity = 0.0f;
+	}
 
 	for (std::shared_ptr<Object3D> obj : scene.objs)
 	{
@@ -64,21 +79,8 @@ void	Renderer::renderScene(Scene &scene)
 		obj->shader.setUniformFloat("light.quadratic", 0.07f);
 		obj->shader.setUniformVec3("viewPos", scene.camera->position);
 
-		if (applyTexture == 1)
-		{
-			texOpacity += 0.025f;
-			if (texOpacity >= 1.0f)
-				texOpacity = 1.0f;
-		}
-		else
-		{
-			texOpacity -= 0.025f;
-			if (texOpacity <= 0.0f)
-				texOpacity = 0.0f;
-		}
 
 		obj->shader.setUniformFloat("texOpacity", texOpacity);
-		// std::cout << "light pos: " << scene.light->getPos() << ", camera pos: " << scene.camera->position << std::endl;
 		
         obj->mesh.draw();
 		

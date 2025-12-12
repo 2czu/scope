@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:31:40 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/12 17:27:51 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 18:34:20 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	Application::initSDL2(void)
     }
 
 	SDL_WarpMouseInWindow(window, windowWidth / 2, windowHeight / 2);
-	SDL_GL_SetSwapInterval(0);
+	SDL_GL_SetSwapInterval(0); // turns V-SYNC OFF
 }
 
 void	Application::initOpenGL(void)
@@ -63,10 +63,12 @@ void	Application::initOpenGL(void)
         throw std::runtime_error("SDL_GL_CreateContext Error: ");
     }
 
+	// Loading all OpenGL functions based on the version
     if (!gladLoadGL()) {
         throw std::runtime_error("Failed to initialize GLAD");
     }
 
+	// OpenGL configuration
 	glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);
@@ -104,6 +106,8 @@ void	Application::initialize(void)
     scene.addObject(obj);
 }
 
+// This gets the epoch with SDL_GetPerformanceCounter() which lets us get the time between calls
+// (useful for frame time based movement speed, and fps displaying)
 static double	getFrameTime(void)
 {
 	static Uint64 NOW = SDL_GetPerformanceCounter();

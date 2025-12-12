@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 12:56:26 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/08 15:27:35 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 18:45:45 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@ class Camera
 		~Camera() {};
 
 		Vector3f		position;
-		Vector3f		target;
-		Vector3f		direction;
-		Vector3f		right;
 		Vector3f		up;
 		Vector3f		front;
 

@@ -6,12 +6,13 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 13:43:12 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/12 11:31:12 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 18:44:45 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Material.hpp"
 
+// Standard 24-bit BMP file parser
 Image loadBMP(const std::string& path) {
     std::ifstream f(path, std::ios::binary);
     if (!f) throw std::runtime_error("Cannot open BMP file");
@@ -56,7 +57,7 @@ Image loadBMP(const std::string& path) {
     return img;
 }
 
-
+// Repeating pattern texture with mipmaps
 Texture::Texture(const std::string &texturefile)
 {
 	glGenTextures(1, &textureID);

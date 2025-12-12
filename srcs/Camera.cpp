@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 16:20:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/12 10:23:05 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 18:45:38 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@ Camera::Camera(int windowWidth, int windowHeight)
 	position = Vector3f(0.0f, 0.0f, 5.0f);
 	front = Vector3f(0.0f, 0.0f, -1.0f);
 	up = Vector3f(0.0f, 1.0f, 0.0f);
-	// target = Vector3f(0.0f, 0.0f, 0.0f);
-	// direction = (position - target).normalized();
-	// right = glm::normalize(glm::cross(up, cameraDirection));
 	pitch = 0.0f;
 	yaw = -90.0f;
 	FOV = 0.66;
