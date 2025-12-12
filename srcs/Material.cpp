@@ -6,11 +6,22 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:58:07 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/08 16:00:20 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 17:09:54 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Material.hpp"
+
+Material::Material()
+{
+	this->ns = 0;
+	this->ka = Vector3f(0.1, 0.1, 0.1);
+	this->kd = Vector3f(1.0, 1.0, 1.0);
+	this->ks = Vector3f(1.0, 1.0, 1.0);
+	this->d = 1;
+	this->illum = 2;
+	this->name = "Default";
+}
 
 Material::Material(const Material &other)
 {

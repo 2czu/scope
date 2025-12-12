@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:52:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/12 10:47:13 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 17:18:35 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ struct subMesh
     Material*					material;
     std::vector<unsigned int>	indices;
 	GLuint						EBO;
+
+	subMesh() {material = nullptr;};
 };
 
 class Mesh

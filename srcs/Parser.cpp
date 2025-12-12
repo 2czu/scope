@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:13:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/12 11:21:59 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 17:23:41 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,25 @@ static void	loadVec3(std::istringstream &iss, Vector3f &vec)
 	iss >> std::ws;
 	if (!iss.eof())
 		throw std::runtime_error("Wrong vertices line format");
+}
+
+static void clearMaterialList(std::unordered_map<std::string, Material *> &materials)
+{
+    for (auto &p : materials)
+    {
+        if (p.second)
+            delete(p.second);
+    }
+    materials.clear();
+}
+
+static void setRemainingMaterial(std::vector<subMesh> &submeshes)
+{
+    for (auto &p : submeshes)
+    {
+        if (p.material == nullptr)
+            p.material = new Material();
+    }
 }
 
 static void loadMaterialList(std::istringstream &iss, std::unordered_map<std::string, Material *> &mats)
@@ -186,7 +205,8 @@ void setMaterial(std::istringstream &iss,
     if (!found)
     {
         subMesh newS;
-        newS.material = mat->clone();
+        if (mat != nullptr)
+            newS.material = mat->clone();
         submeshes.push_back(newS);
         *currentSubmesh = &submeshes.back();
     }
@@ -250,30 +270,35 @@ Mesh Parser::loadMesh(const std::string &filepath)
     std::string line;
     srand(time(NULL));
 
-    while (std::getline(ifs, line))
+    try
     {
-        std::istringstream iss(line);
-        std::string token;
-        iss >> token;
+        while (std::getline(ifs, line))
+        {
+            std::istringstream iss(line);
+            std::string token;
+            iss >> token;
 
-        if (token == "v")
-            handlePositionVertex(iss, vertices);
-        else if (token == "mtllib")
-            loadMaterialList(iss, materials);
-        else if (token == "usemtl")
-            setMaterial(iss, materials, submeshes, &currentSubmesh);
-        else if (token == "f")
-            handleFace(iss, globalIndices, submeshes, &currentSubmesh);
+            if (token == "v")
+                handlePositionVertex(iss, vertices);
+            else if (token == "mtllib")
+                loadMaterialList(iss, materials);
+            else if (token == "usemtl")
+                setMaterial(iss, materials, submeshes, &currentSubmesh);
+            else if (token == "f")
+                handleFace(iss, globalIndices, submeshes, &currentSubmesh);
+        }
+        setRemainingMaterial(submeshes);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+        clearMaterialList(materials);
+        throw std::runtime_error("");
     }
 
+    clearMaterialList(materials);
     centerModel(vertices);
     computeVertexNormals(vertices, globalIndices);
-    for (auto &p : materials)
-    {
-        if (p.second)
-            delete(p.second);
-    }
-    materials.clear();
 
     Mesh mesh(vertices, submeshes);
     return mesh;

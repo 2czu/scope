@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 11:43:46 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/08 10:36:51 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 16:49:09 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,21 @@ unsigned int ShaderProgram::getID() const
 
 void ShaderProgram::link(void)
 {
-	unsigned int vid;
-    unsigned int fid;
+	unsigned int vid = 0;
+    unsigned int fid = 0;
 
     vid = vertex.compile();
+    if (!vid)
+    {
+        throw std::runtime_error("Couldn't compile the vertex shader");
+    }
+
     fid = fragment.compile();
+    if (!fid)
+    {
+        throw std::runtime_error("Couldn't compile the fragment shader");
+    }
+
 
 	programID = glCreateProgram();
 	if (!programID)

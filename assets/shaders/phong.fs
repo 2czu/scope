@@ -81,7 +81,7 @@ vec3 pointLight(Light light, vec3 norm, vec3 fragPos, vec3 viewDir, vec4 texColo
     ambient *= attenuation;
     diffuse *= attenuation;
     specular *= attenuation;
-    return (diffuse + specular + ambient);
+    return (diffuse);
 }
 
 void main()
@@ -96,5 +96,4 @@ void main()
     result *= faceColor;
 
     FragColor = vec4(result, material.alpha * texColor.a);
-
 }

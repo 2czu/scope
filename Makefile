@@ -6,7 +6,7 @@
 #    By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/23 16:41:00 by pacda-si          #+#    #+#              #
-#    Updated: 2025/11/29 18:31:31 by pacda-si         ###   ########.fr        #
+#    Updated: 2025/12/12 17:26:26 by pacda-si         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ BG_ULTRA_BLUE   = \033[48;5;21m
 BG_MAGENTA      = \033[48;5;201m
 
 # ────────────────────────────── Files ───────────────────────────────
-NAME        = scop
+NAME        = scope
 SRCS_DIR    = ./srcs
 
 SRCS        = $(SRCS_DIR)/main.cpp \
@@ -70,7 +70,7 @@ OGL_FLAGS   = -lGL -lGLU -lglut -lSDL2
 
 # ────────────────────────────── Compiler ────────────────────────────
 CXX         = g++
-CXXFLAGS    = -Werror -Wall -Wextra -g3
+CXXFLAGS    = -Werror -Wall -Wextra -g3 -O3
 
 # ────────────────────────────── Rules ───────────────────────────────
 all: $(NAME)

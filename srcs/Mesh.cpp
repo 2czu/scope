@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:45:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/12 10:19:35 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 17:05:12 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,10 @@ Mesh::Mesh(std::vector<Vertex> &vertices, std::vector<subMesh> &submeshes) : tex
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sm.EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sm.indices.size() * sizeof(unsigned int),
             sm.indices.data(), GL_STATIC_DRAW);
+        if (!sm.material)
+        {
+            sm.material = new Material();
+        }
     }
 
 }

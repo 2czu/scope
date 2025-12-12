@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:43:52 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/08 14:58:18 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 17:09:49 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,36 +20,33 @@ struct Image {
     std::vector<unsigned char> pixels;
 };
 
-class Texture
+struct Texture
 {
-	public :
-		Texture(const std::string &texturefile);
-		~Texture() {};
+	unsigned int	textureID; 
+	Image			image;
 
-		unsigned int	textureID; 
-		Image			image;
-		
-		void	bind();
-		void	unbind();
+	Texture(const std::string &texturefile);
+	~Texture() {};
+
+	void	bind();
+	void	unbind();
 };
 
-class Material
+struct Material
 {
-	public :
-		Material()  {};
-		Material(const Material &other);
-		~Material() {};
+	float			ns;
+	Vector3f		ka;
+	Vector3f		kd;
+	Vector3f		ks;
+	float			d;
+	float			illum;
+	std::string		name;
 
-		void		print() const;
-		void		bind(ShaderProgram *shader);
-		Material	*clone(void);
+	Material();
+	Material(const Material &other);
+	~Material() {};
 
-		float			ns;
-		Vector3f		ka;
-		Vector3f		kd;
-		Vector3f		ks;
-		float			d;
-		float			illum;
-		std::string		name;
-
+	void		print() const;
+	void		bind(ShaderProgram *shader);
+	Material	*clone(void);
 };

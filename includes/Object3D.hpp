@@ -6,9 +6,11 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 19:03:55 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/08 10:37:01 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 16:54:43 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#pragma once
 
 #include "Mesh.hpp"
 #include "Material.hpp"
@@ -17,16 +19,12 @@
 #include <unordered_map>
 #include <memory>
 
-class Object3D
+struct Object3D
 {
-	private :
-	
-	public :
-		Mesh										mesh;
-		Transform									transform;
-		ShaderProgram								shader;
+	Mesh										mesh;
+	Transform									transform;
+	ShaderProgram								shader;
 
-		Object3D(const std::string &meshpath, const std::string &shaderf, const std::string &texture);
-		~Object3D() {};
-
+	Object3D(const std::string &meshpath, const std::string &shaderf, const std::string &texture);
+	~Object3D() {};
 };
