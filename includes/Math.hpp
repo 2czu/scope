@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:57:14 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/01 15:46:26 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 10:46:52 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,20 @@
 template <typename T>
 T clamp(T value, T minVal, T maxVal)
 {
-    if (value < minVal) return minVal;
-    if (value > maxVal) return maxVal;
-    return value;
+    if (value < minVal)
+        return (minVal);
+    if (value > maxVal)
+        return (maxVal);
+    return (value);
 }
 
-inline double degToRad(float degrees) {
+inline double degToRad(float degrees)
+{
     return degrees * M_PI / 180.0;
 }
 
-struct Vector2f {
-public:
+struct Vector2f
+{
     float x, y;
 
     Vector2f() : x(0), y(0) {}
@@ -101,7 +104,7 @@ public:
     }
 
     const float* data() const { return &x; }
-float* data() { return &x; }
+    float* data() { return &x; }
 
     void print() const { std::cout << "(" << x << ", " << y << ", " << z << ")\n"; }
 };
@@ -280,7 +283,6 @@ struct Matrix4f {
 
         Matrix4f r = Matrix4f::identity();
 
-        // rotation part (column-major)
         r.m[0] = s.x;
         r.m[1] = u.x;
         r.m[2] = -f.x;
@@ -299,6 +301,4 @@ struct Matrix4f {
 
         return r;
     }
-
-
 };

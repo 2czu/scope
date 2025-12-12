@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:31:40 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/08 15:40:27 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 11:49:17 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ Application::~Application()
     SDL_Quit();
 }
 
-void	Application::initialize(void)
+void	Application::initSDL2(void)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
-        throw std::runtime_error("");
+		std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
+		throw std::runtime_error("");
     }
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
@@ -52,6 +52,12 @@ void	Application::initialize(void)
         throw std::runtime_error("SDL_CreateWindow Error: ");
     }
 
+	SDL_WarpMouseInWindow(window, windowWidth / 2, windowHeight / 2);
+	SDL_GL_SetSwapInterval(0);
+}
+
+void	Application::initOpenGL(void)
+{
     glContext = SDL_GL_CreateContext(window);
     if (!glContext) {
         throw std::runtime_error("SDL_GL_CreateContext Error: ");
@@ -61,6 +67,15 @@ void	Application::initialize(void)
         throw std::runtime_error("Failed to initialize GLAD");
     }
 
+	glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW);
+}
+
+void	Application::initImGui(void)
+{
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO &io = ImGui::GetIO();
@@ -71,45 +86,52 @@ void	Application::initialize(void)
 
 	ImGui_ImplSDL2_InitForOpenGL(window, glContext);
 	ImGui_ImplOpenGL3_Init("#version 330");
+}
 
-	SDL_WarpMouseInWindow(window, windowWidth / 2, windowHeight / 2);
-	SDL_GL_SetSwapInterval(0);
+void	Application::initialize(void)
+{
+	initSDL2();
+	initOpenGL();
+	initImGui();
+
 	auto camera = std::make_unique<Camera>(windowWidth, windowHeight);
-
     scene.setCamera(std::move(camera));
+
+	auto light = std::make_unique<LightSource>("./assets/objs/sphere.obj", "./assets/shaders/lightCube");
+	scene.setLight(std::move(light));
+
+	std::shared_ptr<Object3D> obj = scene.createObject("cube.obj", "shader", "brick.bmp");
+    scene.addObject(obj);
+}
+
+static double	getFrameTime(void)
+{
+	static Uint64 NOW = SDL_GetPerformanceCounter();
+	Uint64 LAST;
+
+	LAST = NOW;
+	NOW = SDL_GetPerformanceCounter();
+
+	double delta_ms = (double)((NOW - LAST) * 1000 / (double)SDL_GetPerformanceFrequency());
+	return (delta_ms / 1000.0);
 }
 
 void	Application::run(void)
 {
-	Uint64 NOW = SDL_GetPerformanceCounter();
-	Uint64 LAST = 0;
-	double frame_time = 0;
 	double time_wasted = 0;
-
 
 	try
 	{
         this->initialize();
 
-		auto light = std::make_unique<LightSource>("./assets/objs/sphere.obj", "./assets/shaders/lightCube");
-		scene.setLight(std::move(light));
-
-		std::shared_ptr<Object3D> obj = scene.createObject("spk.obj", "shader", "brick.bmp");
-        scene.addObject(obj);
-
 		while (running)
 		{
+			renderer.frame_time = getFrameTime();
 			
-			LAST = NOW;
-			NOW = SDL_GetPerformanceCounter();
-
-			double delta_ms = (double)((NOW - LAST) * 1000 / (double)SDL_GetPerformanceFrequency());
-			frame_time = delta_ms / 1000.0;
-
-			time_wasted += frame_time;
-			if (time_wasted >= 0.1)
+			time_wasted += renderer.frame_time;
+			if (time_wasted >= 0.2)
 			{
-				renderer.displayFPS = 1.0 / frame_time;
+				renderer.displayFPS = 1.0 / renderer.frame_time;
 				time_wasted = 0.0;
 			}
 
@@ -119,7 +141,7 @@ void	Application::run(void)
 			if (eventHandler.move_mouse)
 			{
 				scene.camera->rotateCamera(eventHandler.mouse_x, eventHandler.mouse_y,
-					windowWidth, windowHeight, frame_time);	
+					windowWidth, windowHeight, renderer.frame_time);	
 			}
 
 			renderer.renderScene(scene);

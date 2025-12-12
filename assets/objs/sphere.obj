@@ -1,6 +1,6 @@
 o Sphere
 
-mtllib matte.mtl
+mtllib lib.mtl
 
 v 0.000000 1.000000 0.000000
 v 0.000000 1.000000 0.000000

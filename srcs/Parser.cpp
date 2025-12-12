@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:13:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/10 15:35:11 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 11:21:59 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,17 @@ static void	loadVec3(std::istringstream &iss, Vector3f &vec)
 		throw std::runtime_error("Wrong vertices line format");
 }
 
-void loadMaterials(std::unordered_map<std::string, Material *> &mats, const std::string &filepath)
+static void loadMaterialList(std::istringstream &iss, std::unordered_map<std::string, Material *> &mats)
 {
-	std::ifstream				ifs(filepath);
 	std::string					line;
 	Material					*current = NULL;
+    std::string                 mtlFile;
+    std::string                 filepath;
 
+    iss >> mtlFile;
+    filepath = "./assets/mats/" + mtlFile;
+
+    std::ifstream				ifs(filepath);
 	if (!ifs.is_open())
 		throw std::runtime_error("File not found");
 	while (std::getline(ifs, line))
@@ -111,7 +116,6 @@ void loadMaterials(std::unordered_map<std::string, Material *> &mats, const std:
 
 }
 
-
 static void computeVertexNormals(
     std::vector<Vertex>& vertices,
     const std::vector<unsigned int>& indices)
@@ -141,17 +145,103 @@ static void computeVertexNormals(
 }
 
 
+void    handlePositionVertex(std::istringstream &iss, std::vector<Vertex> &vertices)
+{
+    Vector3f pos;
+    if (!(iss >> pos.x >> pos.y >> pos.z))
+        throw std::runtime_error("Bad vertex line");
+
+    Vertex v;
+    v.position = pos;
+    v.color = Vector3f(1, 1, 1);
+    v.uv = Vector2f(pos.x, pos.y).normalized();
+
+    vertices.push_back(v);
+}
+
+void setMaterial(std::istringstream &iss,
+                    std::unordered_map<std::string, Material*>  &materials,
+                    std::vector<subMesh> &submeshes,
+                    subMesh** currentSubmesh
+                )
+{
+    std::string mname;
+    iss >> mname;
+
+    Material* mat = nullptr;
+    if (materials.count(mname))
+        mat = materials[mname];
+
+    bool found = false;
+    for (auto &s : submeshes)
+    {
+        if (s.material == mat)
+        {
+            *currentSubmesh = &s;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+    {
+        subMesh newS;
+        newS.material = mat->clone();
+        submeshes.push_back(newS);
+        *currentSubmesh = &submeshes.back();
+    }
+}
+
+void handleFace(std::istringstream &iss,
+                    std::vector<unsigned int> &globalIndices,
+                    std::vector<subMesh> &submeshes,
+                    subMesh **currentSubmesh)
+{
+    if (!*currentSubmesh)
+    {
+        subMesh def;
+        def.material = nullptr;
+        submeshes.push_back(def);
+        *currentSubmesh = &submeshes.back();
+    }
+
+    unsigned int i1 = 0, i2 = 0, i3 = 0, i4 = 0;
+    if (!(iss >> i1 >> i2 >> i3))
+        throw std::runtime_error("Bad face line");
+
+    iss >> i4;
+
+    (*currentSubmesh)->indices.push_back(i1 - 1);
+    (*currentSubmesh)->indices.push_back(i2 - 1);
+    (*currentSubmesh)->indices.push_back(i3 - 1);
+
+    globalIndices.push_back(i1 - 1);
+    globalIndices.push_back(i2 - 1);
+    globalIndices.push_back(i3 - 1);
+
+    if (i4 != 0)
+    {
+        (*currentSubmesh)->indices.push_back(i1 - 1);
+        (*currentSubmesh)->indices.push_back(i3 - 1);
+        (*currentSubmesh)->indices.push_back(i4 - 1);
+
+        globalIndices.push_back(i1 - 1);
+        globalIndices.push_back(i3 - 1);
+        globalIndices.push_back(i4 - 1);
+    }
+}
+
 Mesh Parser::loadMesh(const std::string &filepath)
 {
-    std::vector<Vector3f>              positions;
-    std::vector<Vector2f>              uvs;
-    std::vector<Vector3f>              normals;
-    std::vector<Vertex>              vertices;
-    std::vector<unsigned int>        globalIndices;
-    std::unordered_map<std::string, Material*> materials;
+    std::vector<Vector3f>                       positions;
+    std::vector<Vector2f>                       uvs;
+    std::vector<Vector3f>                       normals;
+    std::vector<Vertex>                         vertices;
+    std::vector<unsigned int>                   globalIndices;
+    std::unordered_map<std::string, Material*>  materials;
 
-    std::vector<subMesh>             submeshes;
-    subMesh*                         currentSubmesh = nullptr;
+    std::vector<subMesh>                        submeshes;
+    subMesh*                                    currentSubmesh = nullptr;
 
     std::ifstream ifs(filepath);
     if (!ifs.is_open())
@@ -167,118 +257,13 @@ Mesh Parser::loadMesh(const std::string &filepath)
         iss >> token;
 
         if (token == "v")
-        {
-            Vector3f pos;
-            if (!(iss >> pos.x >> pos.y >> pos.z))
-                throw std::runtime_error("Bad vertex line");
-
-            Vertex v;
-            v.position = pos;
-            v.color = Vector3f(1, 1, 1);
-            v.uv = Vector2f(pos.x, pos.y).normalized();
-
-            vertices.push_back(v);
-        }
-
-        else if (token == "vt")
-        {
-            Vector3f pos;
-            if (!(iss >> pos.x >> pos.y >> pos.z))
-                throw std::runtime_error("Bad vertex line");
-
-            Vertex v;
-            v.position = pos;
-            v.color = Vector3f(1, 1, 1);
-            v.uv = Vector2f(pos.x, pos.y).normalized();
-
-            vertices.push_back(v);
-        }
-
-        else if (token == "vn")
-        {
-            Vector3f pos;
-            if (!(iss >> pos.x >> pos.y >> pos.z))
-                throw std::runtime_error("Bad vertex line");
-
-            Vertex v;
-            v.position = pos;
-            v.color = Vector3f(1, 1, 1);
-            v.uv = Vector2f(pos.x, pos.y).normalized();
-
-            vertices.push_back(v);
-        }
-
+            handlePositionVertex(iss, vertices);
         else if (token == "mtllib")
-        {
-            std::string mtlFile;
-            iss >> mtlFile;
-            loadMaterials(materials, "./assets/mats/" + mtlFile);
-        }
-
+            loadMaterialList(iss, materials);
         else if (token == "usemtl")
-        {
-            std::string mname;
-            iss >> mname;
-
-            Material* mat = nullptr;
-            if (materials.count(mname))
-                mat = materials[mname];
-
-            bool found = false;
-            for (auto &s : submeshes)
-            {
-                if (s.material == mat)
-                {
-                    currentSubmesh = &s;
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found)
-            {
-                subMesh newS;
-                newS.material = mat->clone();
-                submeshes.push_back(newS);
-                currentSubmesh = &submeshes.back();
-            }
-        }
-
+            setMaterial(iss, materials, submeshes, &currentSubmesh);
         else if (token == "f")
-        {
-            if (!currentSubmesh)
-            {
-                subMesh def;
-                def.material = nullptr;
-                submeshes.push_back(def);
-                currentSubmesh = &submeshes.back();
-            }
-
-            unsigned int i1 = 0, i2 = 0, i3 = 0, i4 = 0;
-            if (!(iss >> i1 >> i2 >> i3))
-                throw std::runtime_error("Bad face line");
-
-            iss >> i4;
-
-            currentSubmesh->indices.push_back(i1 - 1);
-            currentSubmesh->indices.push_back(i2 - 1);
-            currentSubmesh->indices.push_back(i3 - 1);
-
-            globalIndices.push_back(i1 - 1);
-            globalIndices.push_back(i2 - 1);
-            globalIndices.push_back(i3 - 1);
-
-            if (i4 != 0)
-            {
-                currentSubmesh->indices.push_back(i1 - 1);
-                currentSubmesh->indices.push_back(i3 - 1);
-                currentSubmesh->indices.push_back(i4 - 1);
-
-                globalIndices.push_back(i1 - 1);
-                globalIndices.push_back(i3 - 1);
-                globalIndices.push_back(i4 - 1);
-            }
-        }
+            handleFace(iss, globalIndices, submeshes, &currentSubmesh);
     }
 
     centerModel(vertices);

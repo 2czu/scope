@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:29:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/03 15:38:04 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 10:44:50 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,16 @@ struct	EventHandler
 	EventHandler(Application *application);
 	~EventHandler() {};
 
-	SDL_Event	event;
-	Application	*app;
-	bool		KEYS[322];
-	int			mouse_x;
-	int			mouse_y;
-	bool		lmb_down;
-	bool		move_mouse;
+	SDL_Event		event;
+	Application		*app;
+	bool			KEYS[322];
+	int				mouse_x;
+	int				mouse_y;
+	bool			lmb_down;
+	bool			move_mouse;
 
-	void	mouseHandler();
-	void	keysHandler();
-	void	pollEvents();
+	void			keysHandler();
+	void			pollEvents();
 };
 
 class Application
@@ -65,5 +64,8 @@ class Application
 		bool			running;
 
 		void			initialize();
+		void			initImGui();
+		void			initOpenGL();
+		void			initSDL2();
 		void			run();
 };

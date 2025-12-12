@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 13:43:12 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/08 15:16:46 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 11:31:12 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,6 @@ Image loadBMP(const std::string& path) {
 
 Texture::Texture(const std::string &texturefile)
 {
-
-	
-
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 

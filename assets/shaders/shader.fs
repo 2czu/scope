@@ -81,7 +81,7 @@ vec3 pointLight(Light light, vec3 norm, vec3 fragPos, vec3 viewDir, vec4 texColo
     ambient *= attenuation;
     diffuse *= attenuation;
     specular *= attenuation;
-    return (diffuse);
+    return (diffuse + specular + ambient);
 }
 
 void main()

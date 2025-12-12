@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 16:20:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/08 15:29:53 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 10:23:05 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,8 @@ void	 Camera::rotateCamera(const int &x, const int &y, const int &windowWidth, c
 {
 	static float current_speed_x = 0, current_speed_y = 0;
 
-	float aspect = (float)windowWidth / (float)windowHeight;
 	float xnorm = x / (float)windowWidth;
-	float ynorm = y / (windowHeight * aspect);
+	float ynorm = y / (windowHeight * aspect_ratio);
 
 	const float sensitivity = 40.0f;
 	float target_speed_x = xnorm * sensitivity;

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 15:13:36 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/08 15:39:56 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/12 11:31:45 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@ EventHandler::EventHandler(Application *application)
 	move_mouse = false;
 };
 
-void	EventHandler::mouseHandler()
-{
-	SDL_GetMouseState(&mouse_x, &mouse_y);
-}
 
 void EventHandler::keysHandler()
 {
@@ -109,17 +105,6 @@ void	EventHandler::pollEvents()
 				mouse_x = 0;
 				mouse_y = 0;
 			}
-				
 		}
-		// else if (event.type == SDL_MOUSEBUTTONUP)
-		// {
-		// 	lmb_down = false;
-		// 	SDL_ShowCursor(SDL_DISABLE);
-		// }
-		// else if (event.type == SDL_MOUSEBUTTONDOWN)
-		// {
-		// 	lmb_down = true;
-		// 	SDL_ShowCursor(SDL_ENABLE);
-		// }
 	}
 }
