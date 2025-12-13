@@ -5,13 +5,17 @@ Math library made from scratch, image loader made from scratch.
 
 https://github.com/user-attachments/assets/bfa5aa4d-bfdf-44c0-a7ab-438579b10fa5
 
+## Prerequisites
+
+Linux (Ubuntu/Debian tested). C++17 compiler (GCC 9+, Clang 10+). SDL2 dev headers (`sudo apt-get install libsdl2-dev`). Make.
+
 ## Quick Start
 
 Get started with a single command:
 
 ```bash
 git clone https://github.com/2czu/scope.git && cd scope
-make && ./scop
+make && ./scope
 ```
 
 ## What it does
@@ -73,10 +77,6 @@ scope/
 ```
 
 Each component is in its own file (.hpp/.cpp). Two shaders ship with the engine: shader.vs/.fs (per-object Phong), lightCube.vs/.fs (basic shader). ImGui builds as a static library (libimgui.a) and links into the main executable.
-
-## Prerequisites
-
-Linux (Ubuntu/Debian tested). C++17 compiler (GCC 9+, Clang 10+). SDL2 dev headers (`sudo apt-get install libsdl2-dev`). Make.
 
 ## Customize
 
