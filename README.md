@@ -1,6 +1,6 @@
 # scope
 
-A lightweight 3D rendering engine in C++17 using OpenGL 3.3, SDL2 and Dear ImGui. Load different OBJ models, apply Phong lighting, tweak things in real-time via a live UI.
+A lightweight 3D rendering engine in C++17 using OpenGL 3.3, SDL2 and Dear ImGui. Load different OBJ models and apply different MTL files on them. Use Phong lighting, tweak things in real-time via a live UI.
 Math library made from scratch, image loader made from scratch.
 
 https://github.com/user-attachments/assets/bfa5aa4d-bfdf-44c0-a7ab-438579b10fa5
