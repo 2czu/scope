@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 12:56:26 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/12 18:45:45 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/14 18:16:10 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ class Camera
 		float			yaw;
 		float			movement_speed;
 		
-		Matrix4f getViewMatrix();
-		Matrix4f getProjMatrix();
+		Matrix4f 		getViewMatrix();
+		Matrix4f 		getProjMatrix();
 
 		void	 rotateCamera(const int &x, const int &y, const int &windowWidth,
 								const int &windowHeight, const float &frame_time);

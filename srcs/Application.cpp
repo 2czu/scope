@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 17:31:40 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/12 18:34:20 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/14 18:42:15 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	Application::initialize(void)
 	auto light = std::make_unique<LightSource>("sphere.obj", "basic");
 	scene.setLight(std::move(light));
 
-	std::shared_ptr<Object3D> obj = scene.createObject("spk.obj", "phong", "brick.bmp");
+	std::shared_ptr<Object3D> obj = scene.createObject("teapot2.obj", "phong", "brick.bmp");
     scene.addObject(obj);
 }
 

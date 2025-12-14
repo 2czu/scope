@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:58:07 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/12 17:09:54 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/14 18:40:19 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,5 @@ void Material::bind(ShaderProgram *shader)
 	shader->setUniformVec3("material.specular", ks);
 	shader->setUniformFloat("material.shininess", ns);
 	shader->setUniformFloat("material.alpha", d);
-	shader->setUniformFloat("material.illum", illum);
+	shader->setUniformInt("material.illum", illum);
 }

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:43:52 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/12 17:09:49 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/14 18:40:30 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ struct Material
 	Vector3f		kd;
 	Vector3f		ks;
 	float			d;
-	float			illum;
+	int				illum;
 	std::string		name;
 
 	Material();

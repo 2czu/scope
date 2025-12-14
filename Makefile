@@ -6,7 +6,7 @@
 #    By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/23 16:41:00 by pacda-si          #+#    #+#              #
-#    Updated: 2025/12/12 18:48:24 by pacda-si         ###   ########.fr        #
+#    Updated: 2025/12/14 17:01:34 by pacda-si         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,7 +71,7 @@ OGL_FLAGS   = -lGL -lGLU -lglut -lSDL2
 
 # ────────────────────────────── Compiler ────────────────────────────
 CXX         = g++
-CXXFLAGS    = -Werror -Wall -Wextra -g3 -O3
+CXXFLAGS    = -Werror -Wall -Wextra -g3
 
 # ────────────────────────────── Rules ───────────────────────────────
 all: $(NAME)

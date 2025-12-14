@@ -32,7 +32,7 @@ struct Material {
     vec3 specular;
     float shininess;
     float alpha;
-    float illum;
+    int illum;
 }; 
   
 uniform Material material;
@@ -81,7 +81,17 @@ vec3 pointLight(Light light, vec3 norm, vec3 fragPos, vec3 viewDir, vec4 texColo
     ambient *= attenuation;
     diffuse *= attenuation;
     specular *= attenuation;
-    return (diffuse);
+
+    switch (material.illum)
+    {
+        case 0:
+            return (diffuse);
+        case 1:
+            return (diffuse + ambient);
+        default:
+            break;
+    }
+    return (diffuse + ambient + specular);
 }
 
 void main()

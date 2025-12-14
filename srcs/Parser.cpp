@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 13:13:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/12 17:23:41 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/14 18:40:35 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,10 +129,9 @@ static void loadMaterialList(std::istringstream &iss, std::unordered_map<std::st
 			else if (prefix == "d")
 				loadType<float>(iss, current->d);
 			else if (prefix == "illum")
-				loadType<float>(iss, current->illum);
+				loadType<int>(iss, current->illum);
 		}
 	}
-
 }
 
 static void computeVertexNormals(
@@ -169,6 +168,12 @@ void    handlePositionVertex(std::istringstream &iss, std::vector<Vertex> &verti
     Vector3f pos;
     if (!(iss >> pos.x >> pos.y >> pos.z))
         throw std::runtime_error("Bad vertex line");
+
+    iss >> std::ws;
+    if (!iss.eof())
+        throw std::runtime_error("Bad vertex line");
+
+    // float rf = clamp(randomFloat(), 0.1f, 0.9f);
 
     Vertex v;
     v.position = pos;
@@ -215,7 +220,7 @@ void setMaterial(std::istringstream &iss,
 void handleFace(std::istringstream &iss,
                     std::vector<unsigned int> &globalIndices,
                     std::vector<subMesh> &submeshes,
-                    subMesh **currentSubmesh)
+                    subMesh **currentSubmesh, size_t size)
 {
     if (!*currentSubmesh)
     {
@@ -226,10 +231,14 @@ void handleFace(std::istringstream &iss,
     }
 
     unsigned int i1 = 0, i2 = 0, i3 = 0, i4 = 0;
-    if (!(iss >> i1 >> i2 >> i3))
+    if (!(iss >> i1 >> i2 >> i3) || (i1 == 0 || i1 > size) 
+        || (i2 == 0 || i2 > size) 
+        || (i3 == 0 || i3 > size))
         throw std::runtime_error("Bad face line");
 
-    iss >> i4;
+    iss >> std::ws;
+    if (!iss.eof() && (!(iss >> i4) || i4 == 0 || i4 > size))
+        throw std::runtime_error("Bad fourth face argument");
 
     (*currentSubmesh)->indices.push_back(i1 - 1);
     (*currentSubmesh)->indices.push_back(i2 - 1);
@@ -253,9 +262,9 @@ void handleFace(std::istringstream &iss,
 
 Mesh Parser::loadMesh(const std::string &filepath)
 {
-    std::vector<Vector3f>                       positions;
-    std::vector<Vector2f>                       uvs;
-    std::vector<Vector3f>                       normals;
+    // std::vector<Vector3f>                       positions;
+    // std::vector<Vector2f>                       uvs;
+    // std::vector<Vector3f>                       normals;
     std::vector<Vertex>                         vertices;
     std::vector<unsigned int>                   globalIndices;
     std::unordered_map<std::string, Material*>  materials;
@@ -285,7 +294,7 @@ Mesh Parser::loadMesh(const std::string &filepath)
             else if (token == "usemtl")
                 setMaterial(iss, materials, submeshes, &currentSubmesh);
             else if (token == "f")
-                handleFace(iss, globalIndices, submeshes, &currentSubmesh);
+                handleFace(iss, globalIndices, submeshes, &currentSubmesh, vertices.size());
         }
         setRemainingMaterial(submeshes);
     }

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 15:57:14 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/12 10:46:52 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/14 18:27:00 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ public:
     Vector3f& operator*=(float scalar) { x *= scalar; y *= scalar; z *= scalar; return *this; }
     Vector3f& operator/=(float scalar) { x /= scalar; y /= scalar; z /= scalar; return *this; }
 
+    bool      operator==(const Vector3f &v) { if (x == v.x && y == v.y && z == v.z) return true; return false;}
+
     float length() const { return std::sqrt(x*x + y*y + z*z); }
 
     Vector3f normalized() const {
@@ -118,6 +120,7 @@ inline std::ostream &operator<<(std::ostream &out, const Vector3f &v)
     out << "[" << v.x << "; " << v.y << "; " << v.z << "]";
     return (out);
 }
+
 
 struct Vertex {
     Vector3f position;
