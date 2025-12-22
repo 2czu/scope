@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 16:20:58 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/12 18:45:38 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:52:54 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 Camera::Camera(int windowWidth, int windowHeight)
 {
-	position = Vector3f(0.0f, 0.0f, 5.0f);
+	position = Vector3f(0.0f, 0.0f, 8.0f);
 	front = Vector3f(0.0f, 0.0f, -1.0f);
 	up = Vector3f(0.0f, 1.0f, 0.0f);
 	pitch = 0.0f;
